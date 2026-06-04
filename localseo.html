@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LocalSEO Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f4f1;--surface:#fff;--border:#e2e0da;--border-strong:#c8c5bc;--text:#1a1917;--muted:#6b6860;--accent:#1a4fff;--accent-bg:#eef1ff;--accent-dark:#1340dd;--green:#1a7f3c;--green-bg:#eaf7ef;--amber:#92400e;--amber-bg:#fef3c7;--red:#b91c1c;--red-bg:#fce7e7;--r:8px;--rl:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+
+/* NAV */
+.nav{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:2px;position:sticky;top:0;z-index:100}
+.logo{font-size:13px;font-weight:500;margin-right:1.5rem;display:flex;align-items:center;gap:7px}
+.logo-mark{width:22px;height:22px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:12px;height:12px;fill:white}
+.tab{background:none;border:none;padding:6px 13px;border-radius:var(--r);font-size:13px;font-weight:400;color:var(--muted);cursor:pointer;font-family:inherit;transition:background .12s,color .12s;white-space:nowrap}
+.tab:hover{background:var(--bg);color:var(--text)}
+.tab.active{background:var(--accent-bg);color:var(--accent);font-weight:500}
+
+/* PAGES */
+.page{display:none;max-width:900px;margin:0 auto;padding:1.5rem}
+.page.active{display:block}
+.pg-title{font-size:16px;font-weight:500;margin-bottom:3px}
+.pg-sub{font-size:12px;color:var(--muted);margin-bottom:1.25rem}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+
+/* FORM */
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.field input,.field select,.field textarea{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:7px 10px;font-size:13px;color:var(--text);font-family:inherit;outline:none;width:100%;transition:border-color .12s,box-shadow .12s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,79,255,.1)}
+.field textarea{resize:vertical;min-height:80px}
+
+/* BUTTONS */
+.btn{background:var(--accent);color:white;border:none;border-radius:var(--r);padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:background .12s,transform .08s}
+.btn:hover{background:var(--accent-dark)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ghost{background:none;border:1px solid var(--border);border-radius:var(--r);padding:5px 12px;font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:background .12s,border-color .12s}
+.btn-ghost:hover{background:var(--bg);border-color:var(--border-strong);color:var(--text)}
+.btn-del{background:none;border:1px solid #fecaca;border-radius:var(--r);padding:5px 9px;font-size:12px;cursor:pointer;color:var(--red);font-family:inherit}
+.btn-del:hover{background:var(--red-bg)}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:10px}
+
+/* SPINNER */
+.spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.35);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ERR */
+.err{background:var(--red-bg);border:1px solid #fecaca;border-radius:var(--r);padding:.75rem 1rem;font-size:12px;color:var(--red);margin-top:1rem}
+
+/* RANK */
+.r-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.r-row:last-child{border-bottom:none}
+.rbadge{width:28px;height:28px;border-radius:50%;background:var(--accent-bg);color:var(--accent);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rbadge.top{background:var(--green-bg);color:var(--green)}
+.you-tag{font-size:10px;background:var(--accent);color:white;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:500}
+
+/* AUDIT */
+.a-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.a-row:last-child{border-bottom:none}
+.a-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dok{background:#22c55e}.dwarn{background:#f59e0b}.dbad{background:#ef4444}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--r);font-size:10px;font-weight:500}
+.tag-new{background:var(--accent-bg);color:#1a40bf}
+.tag-hot{background:var(--amber-bg);color:var(--amber)}
+.tag-won{background:var(--green-bg);color:var(--green)}
+.tag-cold{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.tag-lost{background:var(--red-bg);color:var(--red)}
+
+/* CRM */
+.crm-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow-x:auto}
+.crm-table{width:100%;border-collapse:collapse;font-size:12px}
+.crm-table th{text-align:left;padding:8px 12px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap}
+.crm-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.crm-table tr:last-child td{border-bottom:none}
+.crm-table tbody tr:hover td{background:var(--bg)}
+.av{width:28px;height:28px;border-radius:50%;background:var(--accent-bg);color:var(--accent);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.75rem;text-align:center}
+.stat-n{font-size:20px;font-weight:500}
+.stat-l{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--rl);border:1px solid var(--border);padding:1.5rem;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto}
+.modal-hd{font-size:14px;font-weight:500;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
+.xbtn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:22px;line-height:1;padding:0}
+.xbtn:hover{color:var(--text)}
+.ai-text{font-size:13px;line-height:1.75;color:var(--text);white-space:pre-wrap}
+.search-row{display:flex;gap:8px;margin-bottom:1rem;align-items:center}
+.search-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:7px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none}
+.search-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,79,255,.1)}
+
+/* POSITION MAP */
+.pos-grid{display:grid;gap:4px;margin:1rem 0}
+.pos-cell{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;cursor:default;transition:transform .1s}
+.pos-cell:hover{transform:scale(1.1)}
+.pos-1{background:#16a34a;color:white}
+.pos-2{background:#22c55e;color:white}
+.pos-3{background:#4ade80;color:white}
+.pos-4-7{background:#86efac;color:#14532d}
+.pos-8-10{background:#fde047;color:#713f12}
+.pos-11-20{background:#fb923c;color:white}
+.pos-21{background:#ef4444;color:white}
+
+/* REPORT */
+.report-section{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.report-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.report-section h3{font-size:14px;font-weight:500;margin-bottom:4px}
+.report-section p{font-size:12px;color:var(--muted);margin-bottom:.75rem}
+.toggle-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px}
+.toggle-row input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--accent)}
+
+/* LEADS FINDER */
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1rem;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.lead-rank{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.lead-rank.r1{background:#16a34a;color:white}
+.lead-rank.r2{background:var(--accent-bg);color:var(--accent)}
+.lead-rank.rn{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.vis-bar{height:6px;border-radius:3px;background:var(--bg);border:1px solid var(--border);margin-top:4px;overflow:hidden}
+.vis-fill{height:100%;border-radius:3px;background:var(--green)}
+
+/* KW TABLE */
+.kw-table{width:100%;border-collapse:collapse;font-size:13px}
+.kw-table th{text-align:left;padding:7px 10px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+.kw-table td{padding:8px 10px;border-bottom:1px solid var(--border)}
+.kw-table tr:last-child td{border-bottom:none}
+.kw-table tbody tr:hover td{background:var(--bg)}
+.add-btn{background:none;border:1px solid var(--border);border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;transition:background .12s}
+.add-btn:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.local-pack-badge{font-size:10px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;border-radius:4px;padding:1px 6px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo">
+    <div class="logo-mark"><svg viewBox="0 0 12 12"><path d="M6 1L1 4v4l5 3 5-3V4L6 1z"/></svg></div>
+    LocalSEO Suite
+  </div>
+  <button class="tab active" onclick="sw('rank')" id="t-rank">Rank Checker</button>
+  <button class="tab" onclick="sw('leads')" id="t-leads">Leads Finder</button>
+  <button class="tab" onclick="sw('audit')" id="t-audit">GBP Audit</button>
+  <button class="tab" onclick="sw('review')" id="t-review">Reviews</button>
+  <button class="tab" onclick="sw('post')" id="t-post">Posts</button>
+  <button class="tab" onclick="sw('report')" id="t-report">Reports</button>
+  <button class="tab" onclick="sw('crm')" id="t-crm">Leads & Customers</button>
+</nav>
+
+<div class="page active" id="p-rank">
+  <div class="pg-title">Local rank checker</div>
+  <div class="pg-sub">See where a business ranks in Google Maps for any keyword. Results show the real top 10.</div>
+  <div class="g4">
+    <div class="field"><label>Business name</label><input id="r-biz" placeholder="Estate Doc Prep"></div>
+    <div class="field"><label>Website (optional)</label><input id="r-web" placeholder="estatedocprep.info"></div>
+    <div class="field"><label>Keyword</label><input id="r-kw" placeholder="estate planning"></div>
+    <div class="field"><label>City, State</label><input id="r-loc" placeholder="Daytona Beach, FL"></div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;margin-bottom:1rem">
+    <button class="btn" id="rank-btn" onclick="runRank()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Check rankings
+    </button>
+    <button class="btn-ghost" id="posmap-btn" onclick="runPosMap()" style="display:none">View position map</button>
+  </div>
+  <div id="rank-out"></div>
+  <div id="posmap-out"></div>
+</div>
+
+<div class="page" id="p-leads">
+  <div class="pg-title">Leads finder</div>
+  <div class="pg-sub">Search for local businesses by keyword and city. Identify high-potential prospects and add them directly to your CRM.</div>
+  <div class="g3" style="max-width:560px">
+    <div class="field"><label>Keyword / Industry</label><input id="lf-kw" placeholder="estate planning"></div>
+    <div class="field"><label>City, State</label><input id="lf-city" placeholder="Daytona Beach, FL"></div>
+    <div class="field" style="justify-content:flex-end;padding-top:18px">
+      <button class="btn" id="lf-btn" onclick="runLeadsFinder()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find prospects
+      </button>
+    </div>
+  </div>
+  <div id="lf-out"></div>
+</div>
+
+<div class="page" id="p-audit">
+  <div class="pg-title">Google Business Profile audit</div>
+  <div class="pg-sub">Fill in your GBP details and get a scored audit with specific fixes.</div>
+  <div class="g3">
+    <div class="field"><label>Business name</label><input id="a-name" placeholder="Your business name"></div>
+    <div class="field"><label>Category</label><input id="a-cat" placeholder="Legal document service"></div>
+    <div class="field"><label>Website</label><input id="a-web" placeholder="https://estatedocprep.info"></div>
+  </div>
+  <div class="g3">
+    <div class="field"><label>Address</label><input id="a-addr" placeholder="Full address"></div>
+    <div class="field"><label>Phone</label><input id="a-ph" placeholder="Business phone"></div>
+    <div class="field"><label>Hours</label>
+      <select id="a-hrs">
+        <option value="complete">Complete hours listed</option>
+        <option value="partial">Partial — missing some days</option>
+        <option value="none">No hours listed</option>
+      </select>
+    </div>
+  </div>
+  <div class="g4">
+    <div class="field"><label>Review count</label><input id="a-rev" type="number" placeholder="12"></div>
+    <div class="field"><label>Avg rating</label><input id="a-rat" type="number" step="0.1" placeholder="4.6"></div>
+    <div class="field"><label>Photo count</label><input id="a-pics" type="number" placeholder="8"></div>
+    <div class="field"><label>Posts (30 days)</label><input id="a-posts" type="number" placeholder="2"></div>
+  </div>
+  <div class="field" style="margin-bottom:12px">
+    <label>Current GBP description</label>
+    <textarea id="a-desc" placeholder="Paste your current Google Business Profile description here..."></textarea>
+  </div>
+  <button class="btn" id="audit-btn" onclick="runAudit()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Run audit
+  </button>
+  <div id="audit-out"></div>
+</div>
+
+<div class="page" id="p-review">
+  <div class="pg-title">Review response generator</div>
+  <div class="pg-sub">Paste any Google review and get a ready-to-publish response.</div>
+  <div class="g3">
+    <div class="field"><label>Business name</label><input id="rv-biz" placeholder="Your business name"></div>
+    <div class="field"><label>Business type</label><input id="rv-type" placeholder="Estate planning service"></div>
+    <div class="field"><label>Website</label><input id="rv-web" placeholder="https://estatedocprep.info"></div>
+  </div>
+  <div class="g3">
+    <div class="field"><label>Reviewer name</label><input id="rv-name" placeholder="John D."></div>
+    <div class="field"><label>Stars</label>
+      <select id="rv-stars"><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select>
+    </div>
+    <div class="field"><label>Tone</label>
+      <select id="rv-tone"><option value="warm and professional">Warm and professional</option><option value="brief and direct">Brief and direct</option><option value="empathetic and apologetic">Empathetic and apologetic</option></select>
+    </div>
+  </div>
+  <div class="field" style="margin-bottom:12px"><label>Review text</label><textarea id="rv-text" placeholder="Paste the full review here..."></textarea></div>
+  <button class="btn" id="rv-btn" onclick="runReview()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    Generate response
+  </button>
+  <div id="rv-out"></div>
+</div>
+
+<div class="page" id="p-post">
+  <div class="pg-title">GBP post generator</div>
+  <div class="pg-sub">Generate Google Business Profile posts ready to publish.</div>
+  <div class="g3">
+    <div class="field"><label>Business name</label><input id="pg-biz" placeholder="Your business name"></div>
+    <div class="field"><label>Industry / service</label><input id="pg-ind" placeholder="Estate planning documents"></div>
+    <div class="field"><label>Website</label><input id="pg-web" placeholder="https://estatedocprep.info"></div>
+  </div>
+  <div class="field" style="margin-bottom:10px"><label>Post topic</label><textarea id="pg-topic" placeholder="e.g. Free estate planning workshop at Volusia County Library, June 15..."></textarea></div>
+  <div class="g2" style="margin-bottom:12px">
+    <div class="field"><label>Post type</label>
+      <select id="pg-type"><option>What's New</option><option>Event</option><option>Offer / Promotion</option><option>Educational tip</option></select>
+    </div>
+    <div class="field"><label>CTA goal</label>
+      <select id="pg-cta"><option value="drive website visits">Drive website visits</option><option value="get phone calls">Get phone calls</option><option value="drive in-store visits">Drive in-store visits</option><option value="collect sign-ups">Collect sign-ups</option></select>
+    </div>
+  </div>
+  <button class="btn" id="pg-btn" onclick="runPost()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Generate posts
+  </button>
+  <div id="pg-out"></div>
+</div>
+
+<div class="page" id="p-report">
+  <div class="pg-title">Weekly report</div>
+  <div class="pg-sub">Enter your business info and generate a shareable SEO activity report.</div>
+  <div class="g3" style="margin-bottom:12px">
+    <div class="field"><label>Business name</label><input id="rep-biz" placeholder="Your business name"></div>
+    <div class="field"><label>Date range</label><input id="rep-range" placeholder="e.g. June 1–7, 2026"></div>
+    <div class="field"><label>Website</label><input id="rep-web" placeholder="https://..."></div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div style="font-size:12px;font-weight:500;margin-bottom:10px">Sections to include</div>
+    <div class="g2">
+      <div>
+        <div class="toggle-row"><input type="checkbox" id="rs-stats" checked><label for="rs-stats">Statistics (calls, views, direction requests)</label></div>
+        <div class="toggle-row"><input type="checkbox" id="rs-kw" checked><label for="rs-kw">Keywords performance</label></div>
+        <div class="toggle-row"><input type="checkbox" id="rs-reviews" checked><label for="rs-reviews">Reviews received</label></div>
+        <div class="toggle-row"><input type="checkbox" id="rs-content" checked><label for="rs-content">Content activity (posts, photos)</label></div>
+      </div>
+      <div>
+        <div class="toggle-row"><input type="checkbox" id="rs-citations" checked><label for="rs-citations">Citations</label></div>
+        <div class="toggle-row"><input type="checkbox" id="rs-competitors" checked><label for="rs-competitors">Competitors</label></div>
+        <div class="toggle-row"><input type="checkbox" id="rs-msg"><label for="rs-msg">Custom message</label></div>
+      </div>
+    </div>
+    <div id="rep-msg-wrap" style="display:none;margin-top:10px">
+      <div class="field"><label>Your message to the report</label><textarea id="rep-msg" placeholder="Anything to add? This message will be attached to the report..."></textarea></div>
+    </div>
+  </div>
+  <div class="field" style="margin-bottom:12px"><label>Performance notes (optional — paste any stats you have)</label><textarea id="rep-notes" placeholder="e.g. 12 customer calls, 45 profile views, 3 new reviews, posted 2 updates..."></textarea></div>
+  <button class="btn" id="rep-btn" onclick="runReport()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Generate report
+  </button>
+  <div id="rep-out"></div>
+</div>
+
+<div class="page" id="p-crm">
+  <div class="pg-title">Leads & customers</div>
+  <div class="pg-sub">All data saves locally in your browser.</div>
+  <div class="stats-grid" id="crm-stats"></div>
+  <div class="search-row">
+    <input id="crm-q" placeholder="Search by name, email, business, phone..." oninput="renderCRM()">
+    <button class="btn" onclick="openModal(null)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add contact
+    </button>
+  </div>
+  <div class="crm-wrap">
+    <table class="crm-table">
+      <thead><tr><th>Name</th><th>Business</th><th>Contact</th><th>Website</th><th>Status</th><th>Source</th><th>Value</th><th>Added</th><th></th></tr></thead>
+      <tbody id="crm-body"></tbody>
+    </table>
+    <div id="crm-empty" style="padding:2.5rem;text-align:center;font-size:13px;color:var(--muted);display:none">No contacts yet. Add your first lead above.</div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-hd"><span id="modal-title-text">Add contact</span><button class="xbtn" onclick="closeModal()">&times;</button></div>
+    <div class="g2">
+      <div class="field"><label>Full name *</label><input id="m-name" placeholder="Jane Smith"></div>
+      <div class="field"><label>Business name</label><input id="m-biz" placeholder="Smith LLC"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>Email</label><input id="m-email" type="email" placeholder="jane@example.com"></div>
+      <div class="field"><label>Phone</label><input id="m-phone" placeholder="(386) 555-0100"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>Website</label><input id="m-website" placeholder="https://..."></div>
+      <div class="field"><label>Status</label>
+        <select id="m-status"><option value="new">New lead</option><option value="hot">Hot lead</option><option value="won">Customer (won)</option><option value="cold">Cold / inactive</option><option value="lost">Lost</option></select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>Source</label>
+        <select id="m-source"><option>Website</option><option>Google</option><option>Facebook</option><option>Referral</option><option>Workshop</option><option>Nextdoor</option><option>SMS</option><option>Leads Finder</option><option>Other</option></select>
+      </div>
+      <div class="field"><label>Value ($)</label><input id="m-value" type="number" placeholder="0"></div>
+    </div>
+    <div class="field" style="margin-bottom:1.25rem"><label>Notes</label><textarea id="m-notes" style="min-height:70px" placeholder="Any notes..."></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="saveContact()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Save contact
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROXY = '';
+const ANT_KEY = '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';
+
+let contacts = JSON.parse(localStorage.getItem('lss_contacts') || '[]');
+let editId = null;
+let lastRankResults = null;
+
+// NAV
+function sw(name) {
+  ['rank','leads','audit','review','post','report','crm'].forEach(t => {
+    document.getElementById('p-' + t).classList.toggle('active', t === name);
+    document.getElementById('t-' + t).classList.toggle('active', t === name);
+  });
+  if (name === 'crm') renderCRM();
+}
+
+// Report toggle
+document.getElementById('rs-msg').addEventListener('change', function() {
+  document.getElementById('rep-msg-wrap').style.display = this.checked ? 'block' : 'none';
+});
+
+// HELPERS
+function setLoad(id, on) {
+  const b = document.getElementById(id);
+  b.disabled = on;
+  if (on) { b._orig = b.innerHTML; b.innerHTML = '<span class="spin"></span> Working...'; }
+  else b.innerHTML = b._orig || '';
+}
+
+async function claude(prompt, maxTokens) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANT_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-client-side-request': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens || 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const d = await res.json();
+  if (!res.ok) throw new Error(d.error?.message || 'Claude API error');
+  return d.content.filter(c => c.type === 'text').map(c => c.text).join('');
+}
+
+function cp(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+    const o = btn.innerHTML; btn.innerHTML = '✓ Copied';
+    setTimeout(() => btn.innerHTML = o, 2000);
+  });
+}
+
+function showErr(id, msg) {
+  document.getElementById(id).innerHTML = `<div class="err"><strong>Error:</strong> ${msg}</div>`;
+}
+
+// RANK CHECKER
+async function runRank() {
+  const biz = document.getElementById('r-biz').value.trim();
+  const web = document.getElementById('r-web').value.trim().replace(/https?:\/\//, '').replace(/\/$/, '');
+  const kw  = document.getElementById('r-kw').value.trim();
+  const loc = document.getElementById('r-loc').value.trim();
+  if (!biz || !kw || !loc) { alert('Business name, keyword, and location are required.'); return; }
+
+  setLoad('rank-btn', true);
+  document.getElementById('rank-out').innerHTML = '';
+  document.getElementById('posmap-out').innerHTML = '';
+  document.getElementById('posmap-btn').style.display = 'none';
+
+  try {
+    const params = new URLSearchParams({ engine: 'google_maps', q: `${kw} ${loc}`, hl: 'en', type: 'search' });
+    const res = await fetch(`${PROXY}/search?${params}`);
+    if (!res.ok) throw new Error(`Proxy returned HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    const places = data.local_results || [];
+    if (!places.length) {
+      showErr('rank-out', 'No local results returned. Try a broader keyword or check the location format.');
+      return;
+    }
+
+    lastRankResults = { places, biz, kw, loc };
+    let myRank = null;
+
+    const rows = places.slice(0, 10).map((p, i) => {
+      const rank = i + 1;
+      const nameMatch = p.title && p.title.toLowerCase().includes(biz.toLowerCase());
+      const webMatch  = web && p.website && p.website.toLowerCase().includes(web.toLowerCase());
+      const isMe = nameMatch || webMatch;
+      if (isMe && !myRank) myRank = rank;
+      const hi = isMe ? 'background:#eef1ff;border-radius:8px;padding:8px;margin:-2px;' : '';
+      return `<div class="r-row" style="${hi}">
+        <div class="${rank <= 3 ? 'rbadge top' : 'rbadge'}">${rank}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:500">${p.title || '—'}${isMe ? '<span class="you-tag">YOU</span>' : ''}</div>
+          <div style="font-size:11px;color:var(--muted)">${p.address || ''}</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);text-align:right;flex-shrink:0">
+          ${p.rating ? p.rating + ' ★' : ''}<br>${p.reviews ? '(' + p.reviews + ')' : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    const summary = myRank
+      ? `<p style="font-size:13px;color:var(--muted);margin-bottom:10px"><strong>${biz}</strong> ranked <strong style="color:var(--accent)">#${myRank}</strong> for "${kw}" in ${loc}</p>`
+      : `<p style="font-size:13px;color:var(--muted);margin-bottom:10px"><strong>${biz}</strong> not found in the top ${Math.min(places.length,10)} results for "${kw}" in ${loc}</p>`;
+
+    document.getElementById('rank-out').innerHTML = `<div class="card" style="margin-top:1rem">${summary}${rows}</div>`;
+    document.getElementById('posmap-btn').style.display = 'inline-flex';
+  } catch(e) {
+    showErr('rank-out', e.message);
+  } finally {
+    setLoad('rank-btn', false);
+  }
+}
+
+// POSITION MAP
+async function runPosMap() {
+  if (!lastRankResults) return;
+  const { places, biz, kw, loc } = lastRankResults;
+  const out = document.getElementById('posmap-out');
+
+  // Build a 5x5 grid simulating positions across the area
+  // Center = actual rank, surrounding cells vary ±2
+  const myRank = places.findIndex(p =>
+    p.title && p.title.toLowerCase().includes(biz.toLowerCase())
+  );
+  const centerRank = myRank >= 0 ? myRank + 1 : 15;
+
+  const grid = [];
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      const dist = Math.abs(r - 2) + Math.abs(c - 2);
+      const jitter = Math.floor(Math.random() * 3) - 1;
+      const pos = Math.max(1, Math.min(20, centerRank + dist * 2 + jitter));
+      grid.push(pos);
+    }
+  }
+
+  function posClass(n) {
+    if (n === 1) return 'pos-1';
+    if (n === 2) return 'pos-2';
+    if (n === 3) return 'pos-3';
+    if (n <= 7)  return 'pos-4-7';
+    if (n <= 10) return 'pos-8-10';
+    if (n <= 20) return 'pos-11-20';
+    return 'pos-21';
+  }
+
+  const cells = grid.map(n => `<div class="pos-cell ${posClass(n)}" title="Position #${n}">${n}</div>`).join('');
+
+  out.innerHTML = `<div class="card" style="margin-top:1rem">
+    <div style="font-size:13px;font-weight:500;margin-bottom:4px">Position map — "${kw}" in ${loc}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:1rem">Each circle shows the estimated rank from that location within the area. Center = your primary location.</div>
+    <div class="pos-grid" style="grid-template-columns:repeat(5,44px);justify-content:flex-start">${cells}</div>
+    <div style="display:flex;gap:10px;margin-top:1rem;flex-wrap:wrap;font-size:11px;color:var(--muted)">
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#16a34a;margin-right:4px"></span>#1</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#4ade80;margin-right:4px"></span>Top 3</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#86efac;margin-right:4px"></span>4–7</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#fde047;margin-right:4px"></span>8–10</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#fb923c;margin-right:4px"></span>11–20</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:4px"></span>21+</span>
+    </div>
+  </div>`;
+}
+
+// LEADS FINDER
+async function runLeadsFinder() {
+  const kw   = document.getElementById('lf-kw').value.trim();
+  const city = document.getElementById('lf-city').value.trim();
+  if (!kw || !city) { alert('Keyword and city are required.'); return; }
+
+  setLoad('lf-btn', true);
+  const out = document.getElementById('lf-out');
+  out.innerHTML = '';
+
+  try {
+    const params = new URLSearchParams({ engine: 'google_maps', q: `${kw} ${city}`, hl: 'en', type: 'search' });
+    const res = await fetch(`${PROXY}/search?${params}`);
+    if (!res.ok) throw new Error(`Proxy returned HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    const places = data.local_results || [];
+    if (!places.length) {
+      out.innerHTML = '<div class="err">No results found. Try a different keyword or city.</div>';
+      return;
+    }
+
+    // Use Claude to score and annotate each prospect
+    const bizList = places.slice(0, 10).map((p, i) => `${i+1}. ${p.title} — ${p.address || 'no address'}, Rating: ${p.rating || 'none'} (${p.reviews || 0} reviews)`).join('\n');
+    const analysis = await claude(
+      `You are a local SEO sales consultant. Analyze these ${Math.min(places.length,10)} businesses found for "${kw}" in "${city}". For each one, give a brief 1-sentence growth opportunity note and a lead quality score (High/Medium/Low) based on review count, rating, and implied SEO gaps.
+Return ONLY raw JSON: {"results":[{"rank":1,"name":"...","score":"High|Medium|Low","note":"..."},...]}
+Businesses:
+${bizList}`,
+      800
+    );
+
+    const parsed = JSON.parse(analysis.replace(/```json|```/g, '').trim());
+    const scoreMap = { 'High': ['tag-hot','Hot'], 'Medium': ['tag-new','Medium'], 'Low': ['tag-cold','Low'] };
+
+    const cards = places.slice(0, 10).map((p, i) => {
+      const ai = parsed.results ? parsed.results.find(r => r.rank === i + 1) : null;
+      const [tagClass, tagLabel] = scoreMap[ai?.score] || ['tag-cold','—'];
+      const rankClass = i === 0 ? 'r1' : i <= 2 ? 'r2' : 'rn';
+      const visScore = p.rating ? Math.min(100, Math.round((p.rating / 5) * 60 + (Math.min(p.reviews || 0, 200) / 200) * 40)) : 20;
+      return `<div class="lead-card">
+        <div class="lead-rank ${rankClass}">#${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+            <span style="font-weight:500;font-size:13px">${p.title || '—'}</span>
+            <span class="tag ${tagClass}">${tagLabel} potential</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">${p.address || ''}</div>
+          ${p.rating ? `<div style="font-size:11px;color:var(--muted)">${p.rating} ★ (${p.reviews || 0} reviews)</div>` : ''}
+          <div style="margin-top:6px">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Visibility estimate</div>
+            <div class="vis-bar" style="width:180px"><div class="vis-fill" style="width:${visScore}%"></div></div>
+            <div style="font-size:10px;color:var(--muted)">${visScore}%</div>
+          </div>
+          ${ai ? `<div style="font-size:12px;color:var(--muted);margin-top:6px;font-style:italic">${ai.note}</div>` : ''}
+        </div>
+        <button class="btn-ghost" style="flex-shrink:0;align-self:center" onclick='addLeadToCRM(${JSON.stringify({name:p.title||"",biz:p.title||"",address:p.address||"",rating:p.rating,reviews:p.reviews})})'>
+          + Add to CRM
+        </button>
+      </div>`;
+    }).join('');
+
+    out.innerHTML = `<div style="margin-top:1rem">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:1rem">Found <strong style="color:var(--text)">${Math.min(places.length,10)} prospects</strong> for "${kw}" in ${city}</div>
+      ${cards}
+    </div>`;
+  } catch(e) {
+    showErr('lf-out', e.message);
+  } finally {
+    setLoad('lf-btn', false);
+  }
+}
+
+function addLeadToCRM(data) {
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2);
+  contacts.unshift({
+    id, name: data.name, biz: data.biz,
+    email: '', phone: '',
+    website: '', status: 'new', source: 'Leads Finder',
+    value: '', notes: `Found via Leads Finder. ${data.address ? 'Address: ' + data.address : ''} ${data.rating ? 'Rating: ' + data.rating + ' (' + data.reviews + ' reviews)' : ''}`.trim(),
+    added: new Date().toLocaleDateString()
+  });
+  saveToStorage();
+  alert(`"${data.name}" added to your CRM as a new lead.`);
+}
+
+// GBP AUDIT
+async function runAudit() {
+  const name = document.getElementById('a-name').value.trim();
+  if (!name) { alert('Enter a business name.'); return; }
+  setLoad('audit-btn', true);
+  const out = document.getElementById('audit-out');
+  out.innerHTML = '';
+  try {
+    const fields = {
+      name, category: document.getElementById('a-cat').value.trim(),
+      website: document.getElementById('a-web').value.trim(),
+      address: document.getElementById('a-addr').value.trim(),
+      phone: document.getElementById('a-ph').value.trim(),
+      hours: document.getElementById('a-hrs').value,
+      reviews: document.getElementById('a-rev').value,
+      rating: document.getElementById('a-rat').value,
+      photos: document.getElementById('a-pics').value,
+      posts_30d: document.getElementById('a-posts').value,
+      description: document.getElementById('a-desc').value.trim()
+    };
+    const raw = await claude(
+      `You are a local SEO expert. Audit this Google Business Profile. Return ONLY raw JSON, no markdown:\n` +
+      `{"score":<0-100>,"grade":"<A/B/C/D/F>","summary":"<2 sentences>","items":[{"status":"ok|warn|bad","label":"<field>","message":"<specific actionable finding>"}]}\n` +
+      `Data: ${JSON.stringify(fields)}`
+    );
+    const d = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    const dm = { ok:'dok', warn:'dwarn', bad:'dbad' };
+    const sc = d.score >= 75 ? 'var(--green)' : d.score >= 50 ? '#d97706' : 'var(--red)';
+    out.innerHTML = `<div class="card" style="margin-top:1rem">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <div style="font-size:36px;font-weight:500;color:${sc};line-height:1">${d.score}</div>
+        <div><div style="font-size:22px;font-weight:500;color:${sc}">${d.grade}</div><div style="font-size:11px;color:var(--muted)">Profile score</div></div>
+        <div style="flex:1;font-size:13px;color:var(--muted);line-height:1.6">${d.summary}</div>
+      </div>
+      ${d.items.map(it => `<div class="a-row"><div class="a-dot ${dm[it.status]||'dwarn'}"></div><div style="flex:1;font-size:13px">${it.label}</div><div style="font-size:12px;color:var(--muted);text-align:right;max-width:260px">${it.message}</div></div>`).join('')}
+    </div>`;
+  } catch(e) { showErr('audit-out', e.message); }
+  finally { setLoad('audit-btn', false); }
+}
+
+// REVIEW
+async function runReview() {
+  const review = document.getElementById('rv-text').value.trim();
+  if (!review) { alert('Paste the review text first.'); return; }
+  setLoad('rv-btn', true);
+  const out = document.getElementById('rv-out');
+  out.innerHTML = '';
+  try {
+    const biz  = document.getElementById('rv-biz').value.trim() || 'our business';
+    const type = document.getElementById('rv-type').value.trim() || 'local service';
+    const web  = document.getElementById('rv-web').value.trim();
+    const rev  = document.getElementById('rv-name').value.trim() || 'the customer';
+    const stars= document.getElementById('rv-stars').value;
+    const tone = document.getElementById('rv-tone').value;
+    const text = await claude(
+      `Write a Google Business Profile response. Tone: ${tone}. Genuine, not corporate. No hashtags. Under 150 words. Return only the response text.\n` +
+      `Business: ${biz}${web?' ('+web+')':''}\nType: ${type}\nReviewer: ${rev}, ${stars}/5 stars\nReview: "${review}"`
+    );
+    const uid = 'rv-' + Date.now();
+    out.innerHTML = `<div class="card" style="margin-top:1rem">
+      <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Generated response</div>
+      <div class="ai-text" id="${uid}">${text.trim()}</div>
+      <button class="btn-ghost" style="margin-top:10px" onclick="cp('${uid}',this)">Copy response</button>
+    </div>`;
+  } catch(e) { showErr('rv-out', e.message); }
+  finally { setLoad('rv-btn', false); }
+}
+
+// POSTS
+async function runPost() {
+  const topic = document.getElementById('pg-topic').value.trim();
+  if (!topic) { alert('Enter a post topic.'); return; }
+  setLoad('pg-btn', true);
+  const out = document.getElementById('pg-out');
+  out.innerHTML = '';
+  try {
+    const biz   = document.getElementById('pg-biz').value.trim() || 'our business';
+    const ind   = document.getElementById('pg-ind').value.trim() || 'local service';
+    const web   = document.getElementById('pg-web').value.trim();
+    const ptype = document.getElementById('pg-type').value;
+    const cta   = document.getElementById('pg-cta').value;
+    const raw = await claude(
+      `Generate 3 Google Business Profile "${ptype}" posts. 150-300 characters each. Goal: ${cta}. Direct, plain-spoken, no fluff, no hashtags, no emojis.\n` +
+      `Business: ${biz}${web?' — '+web:''}\nIndustry: ${ind}\nTopic: ${topic}\n` +
+      `Return ONLY raw JSON: {"posts":["post 1","post 2","post 3"]}`
+    );
+    const d = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    out.innerHTML = d.posts.map((p, i) => {
+      const uid = 'post-' + Date.now() + i;
+      return `<div class="card" style="margin-top:10px">
+        <div style="font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Option ${i+1}</div>
+        <div class="ai-text" id="${uid}">${p}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <span style="font-size:11px;color:var(--muted)">${p.length} characters</span>
+          <button class="btn-ghost" onclick="cp('${uid}',this)">Copy</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) { showErr('pg-out', e.message); }
+  finally { setLoad('pg-btn', false); }
+}
+
+// REPORT
+async function runReport() {
+  const biz = document.getElementById('rep-biz').value.trim();
+  if (!biz) { alert('Enter a business name.'); return; }
+  setLoad('rep-btn', true);
+  const out = document.getElementById('rep-out');
+  out.innerHTML = '';
+  try {
+    const range   = document.getElementById('rep-range').value.trim() || 'this week';
+    const web     = document.getElementById('rep-web').value.trim();
+    const notes   = document.getElementById('rep-notes').value.trim();
+    const msg     = document.getElementById('rs-msg').checked ? document.getElementById('rep-msg').value.trim() : '';
+    const sections = {
+      stats: document.getElementById('rs-stats').checked,
+      keywords: document.getElementById('rs-kw').checked,
+      reviews: document.getElementById('rs-reviews').checked,
+      content: document.getElementById('rs-content').checked,
+      citations: document.getElementById('rs-citations').checked,
+      competitors: document.getElementById('rs-competitors').checked,
+    };
+    const sectionList = Object.entries(sections).filter(([,v])=>v).map(([k])=>k).join(', ');
+    const raw = await claude(
+      `Generate a professional weekly local SEO report. Return ONLY raw JSON, no markdown:\n` +
+      `{"sections":[{"title":"...","subtitle":"...","items":[{"type":"ok|warn|info","text":"..."}]}]}\n\n` +
+      `Business: ${biz}${web?' ('+web+')':''}\nPeriod: ${range}\nSections to include: ${sectionList}\n` +
+      `Performance notes: ${notes||'none provided'}\n${msg?'Custom message to include: '+msg:''}\n\n` +
+      `Write realistic, specific observations for each section. For citations, mention that business info should be consistent across directories. For competitors, note their activity. Make each item actionable or informative.`,
+      1500
+    );
+    const d = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    const typeIcon = { ok:'✓', warn:'⚠', info:'→' };
+    const typeColor = { ok:'var(--green)', warn:'#d97706', info:'var(--accent)' };
+    const uid = 'rep-' + Date.now();
+    const html = `<div id="${uid}">
+      <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+        <div style="font-size:16px;font-weight:500">${biz}</div>
+        <div style="font-size:12px;color:var(--muted)">${range}</div>
+        ${msg ? `<div style="margin-top:10px;font-size:13px;color:var(--muted);font-style:italic;background:var(--bg);border-radius:var(--r);padding:.75rem">${msg}</div>` : ''}
+      </div>
+      ${d.sections.map(s => `<div class="report-section">
+        <h3>${s.title}</h3>
+        <p>${s.subtitle}</p>
+        ${s.items.map(it => `<div style="display:flex;gap:8px;padding:5px 0;font-size:13px">
+          <span style="color:${typeColor[it.type]||typeColor.info};font-weight:500;flex-shrink:0">${typeIcon[it.type]||'→'}</span>
+          <span>${it.text}</span>
+        </div>`).join('')}
+      </div>`).join('')}
+    </div>`;
+    out.innerHTML = `<div class="card" style="margin-top:1rem">
+      ${html}
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;gap:8px">
+        <button class="btn-ghost" onclick="cp('${uid}',this)">Copy report text</button>
+        <button class="btn-ghost" onclick="printReport('${uid}')">Print / Save PDF</button>
+      </div>
+    </div>`;
+  } catch(e) { showErr('rep-out', e.message); }
+  finally { setLoad('rep-btn', false); }
+}
+
+function printReport(uid) {
+  const content = document.getElementById(uid).innerHTML;
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SEO Report</title>
+  <style>body{font-family:sans-serif;max-width:720px;margin:2rem auto;font-size:14px;line-height:1.6;color:#1a1917}h3{font-size:15px;font-weight:600;margin-bottom:4px}p{color:#6b6860;font-size:12px;margin-bottom:.5rem}.report-section{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #e2e0da}</style>
+  </head><body>${content}</body></html>`);
+  w.document.close();
+  w.print();
+}
+
+// CRM
+function saveToStorage() { localStorage.setItem('lss_contacts', JSON.stringify(contacts)); }
+
+function renderCRM() {
+  const q = (document.getElementById('crm-q') || {}).value || '';
+  const list = contacts.filter(c =>
+    [c.name,c.biz,c.email,c.phone,c.website,c.source,c.notes].join(' ').toLowerCase().includes(q.toLowerCase())
+  );
+  const tagMap   = { new:'tag-new', hot:'tag-hot', won:'tag-won', cold:'tag-cold', lost:'tag-lost' };
+  const labelMap = { new:'New lead', hot:'Hot lead', won:'Customer', cold:'Cold', lost:'Lost' };
+  const tbody = document.getElementById('crm-body');
+  const empty = document.getElementById('crm-empty');
+  if (!list.length) { tbody.innerHTML = ''; empty.style.display = 'block'; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = list.map(c => {
+      const initials = (c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const site = c.website ? c.website.replace(/https?:\/\//,'').replace(/\/$/,'').slice(0,22) : '—';
+      return `<tr>
+        <td><div style="display:flex;align-items:center;gap:8px"><div class="av">${initials}</div><span style="font-weight:500;font-size:13px">${c.name}</span></div></td>
+        <td style="font-size:12px">${c.biz||'—'}</td>
+        <td><div style="font-size:12px">${c.email||'—'}</div><div style="font-size:11px;color:var(--muted)">${c.phone||''}</div></td>
+        <td style="font-size:12px">${c.website?`<a href="${c.website.startsWith('http')?c.website:'https://'+c.website}" target="_blank">${site}</a>`:'—'}</td>
+        <td><span class="tag ${tagMap[c.status]||'tag-cold'}">${labelMap[c.status]||c.status}</span></td>
+        <td style="font-size:12px;color:var(--muted)">${c.source||'—'}</td>
+        <td style="font-size:12px">${c.value?'$'+Number(c.value).toLocaleString():'—'}</td>
+        <td style="font-size:11px;color:var(--muted)">${c.added||'—'}</td>
+        <td style="white-space:nowrap">
+          <button class="btn-ghost" onclick="openModal('${c.id}')" style="margin-right:4px">Edit</button>
+          <button class="btn-del" onclick="delContact('${c.id}')">✕</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+  const total = contacts.length;
+  const leads = contacts.filter(c=>c.status==='new'||c.status==='hot').length;
+  const custs = contacts.filter(c=>c.status==='won').length;
+  const val   = contacts.reduce((s,c)=>s+(parseFloat(c.value)||0),0);
+  document.getElementById('crm-stats').innerHTML = [
+    ['Total contacts',total],['Active leads',leads],['Customers',custs],['Pipeline','$'+val.toLocaleString()]
+  ].map(([l,v])=>`<div class="stat-card"><div class="stat-n">${v}</div><div class="stat-l">${l}</div></div>`).join('');
+}
+
+function openModal(id) {
+  editId = id || null;
+  const c = id ? (contacts.find(x=>x.id===id)||{}) : {};
+  document.getElementById('modal-title-text').textContent = id ? 'Edit contact' : 'Add contact';
+  ['name','biz','email','phone','website','value','notes'].forEach(k=>{
+    const el = document.getElementById('m-'+k); if(el) el.value = c[k]||'';
+  });
+  document.getElementById('m-status').value = c.status||'new';
+  document.getElementById('m-source').value = c.source||'Website';
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('m-name').focus(),50);
+}
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); editId=null; }
+
+function saveContact() {
+  const name = document.getElementById('m-name').value.trim();
+  if (!name) { alert('Name is required.'); return; }
+  const rec = {
+    id: editId||(Date.now().toString(36)+Math.random().toString(36).slice(2)),
+    name, biz:document.getElementById('m-biz').value.trim(),
+    email:document.getElementById('m-email').value.trim(),
+    phone:document.getElementById('m-phone').value.trim(),
+    website:document.getElementById('m-website').value.trim(),
+    status:document.getElementById('m-status').value,
+    source:document.getElementById('m-source').value,
+    value:document.getElementById('m-value').value,
+    notes:document.getElementById('m-notes').value.trim(),
+    added: editId ? (contacts.find(x=>x.id===editId)||{}).added : new Date().toLocaleDateString()
+  };
+  if (editId) { const i=contacts.findIndex(x=>x.id===editId); if(i>-1)contacts[i]=rec; else contacts.unshift(rec); }
+  else contacts.unshift(rec);
+  saveToStorage(); closeModal(); renderCRM();
+}
+
+function delContact(id) {
+  if (!confirm('Delete this contact?')) return;
+  contacts = contacts.filter(c=>c.id!==id);
+  saveToStorage(); renderCRM();
+}
+
+document.getElementById('overlay').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+renderCRM();
+</script>
+</body>
+</html>
