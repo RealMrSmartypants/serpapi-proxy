@@ -3,12 +3,11 @@ const https = require('https');
 const url = require('url');
 
 const PORT = process.env.PORT || 3000;
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', '*');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -17,16 +16,17 @@ const server = http.createServer((req, res) => {
   }
 
   const parsed = url.parse(req.url, true);
+  const path = parsed.pathname.replace(/\/+$/, '') || '/';
 
-  if (parsed.pathname === '/health') {
+  if (path === '/health' || path === '/') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok' }));
+    res.end(JSON.stringify({ status: 'ok', message: 'SerpAPI proxy running' }));
     return;
   }
 
-  if (parsed.pathname !== '/search') {
+  if (path !== '/search') {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Not found' }));
+    res.end(JSON.stringify({ error: 'Not found. Use /search?engine=...&q=...' }));
     return;
   }
 
@@ -39,7 +39,10 @@ const server = http.createServer((req, res) => {
     let data = '';
     serpRes.on('data', chunk => data += chunk);
     serpRes.on('end', () => {
-      res.writeHead(serpRes.statusCode, { 'Content-Type': 'application/json' });
+      res.writeHead(serpRes.statusCode, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      });
       res.end(data);
     });
   }).on('error', (e) => {
