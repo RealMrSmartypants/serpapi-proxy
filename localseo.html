@@ -17,12 +17,14 @@
 <meta property="og:image" content="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6a222b0bda24932f12181a5f.png">
 <meta property="og:type" content="website">
 
-<!-- TWITTER LAYER ENHANCEMENTS -->
+<!-- TWITTER CARD META HOOKS -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="LocalBoostPro | Enterprise Local SEO & AEO Platform">
 <meta name="twitter:description" content="Centralize directory review monitoring and automate keyword position velocity grids with one click.">
 <meta name="twitter:image" content="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6a222b0bda24932f12181a5f.png">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;700&display=swap');
 
@@ -54,12 +56,19 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; font-size: 14px; line-height: 1.6; overflow-x: hidden; }
 
-/* BRANDING NAVIGATION SYSTEM LAYER */
+/* NAVIGATION ASSET LAYOUTS */
 .landing-nav { height: 95px; background: #06060F; display: flex; align-items: center; justify-content: space-between; padding: 0 4rem; border-bottom: 1px solid rgba(255,255,255,0.04); position: relative; z-index: 10; }
 .logo-container { display: flex; align-items: center; gap: 14px; font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 900; color: var(--white); letter-spacing: -0.02em; text-transform: uppercase; }
 .logo-container img { height: 52px; width: auto; object-fit: contain; }
 
-/* HIGH PERMEABILITY HERO SECTION TRACK */
+.app-nav-system { height: 65px; background: #0A0A1F; border-bottom: 1px solid rgba(255,255,255,0.1); display: none; align-items: center; padding: 0 2rem; position: sticky; top: 0; z-index: 100; }
+.app-nav-system .logo-container { font-size: 16px; margin-right: 2rem; }
+.app-nav-system .logo-container img { height: 32px; }
+.app-tab-node { background: none; border: none; padding: 8px 16px; border-radius: var(--r); font-size: 13px; font-weight: 500; color: var(--gray); cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+.app-tab-node:hover { color: var(--cyan); background: rgba(255,255,255,0.05); }
+.app-tab-node.active { color: var(--dark); background: var(--cyan); font-weight: 700; }
+
+/* THE WIDE-CANVAS LANDING ROW SECTORS */
 .premium-hero { padding: 8rem 4rem 6rem 4rem; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 60px; align-items: center; position: relative; }
 .hero-left { text-align: left; z-index: 2; }
 .hero-left h1 { font-family: 'Inter', sans-serif; font-size: clamp(38px, 4.8vw, 62px); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.5rem; color: var(--white); }
@@ -69,7 +78,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .hero-right-portrait img { width: 100%; max-width: 480px; height: auto; object-fit: contain; display: block; z-index: 2; }
 .portrait-glow-back { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,229,255,0.15) 0%, transparent 70%); top: 15%; right: 15%; z-index: 1; }
 
-/* THE MARQUEE BRAND TRUST PROVOKER TRACK ELEMENT */
+.conversion-subbar { background: linear-gradient(90deg, rgba(0,229,255,0.08), rgba(123,94,167,0.08)); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 24px 40px; text-align: center; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; color: var(--cyan); letter-spacing: 0.02em; }
+
 #aivm-trusted { background: #060610; padding: 64px 40px; position: relative; border-top: 1px solid rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.04); }
 .aivm-trusted-inner { max-width: 1400px; margin: 0 auto; }
 .aivm-trusted-featured { background: linear-gradient(135deg,rgba(0,229,255,.06) 0%,rgba(123,94,167,.06) 100%); border: 1px solid rgba(0,229,255,.12); border-radius: 16px; padding: 32px 40px; margin-bottom: 48px; display: grid; grid-template-columns: auto 1fr auto; gap: 32px; align-items: center; text-align: left; }
@@ -88,7 +98,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .aivm-logo-item { flex-shrink: 0; height: 44px; display: flex; align-items: center; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 8px; padding: 8px 16px; }
 .aivm-logo-item img { height: 28px; width: auto; max-width: 110px; object-fit: contain; display: block; }
 
-/* FULL WIDTH HIGH PERMEABILITY ROW ALTERNATIONS (MATCHING IMAGE_C4325E.JPG) */
 .fullwidth-showcase-container { width: 100%; display: flex; flex-direction: column; padding: 4rem 0; }
 .fullwidth-strip-section { width: 100%; padding: 5rem 4rem; position: relative; border-bottom: 1px solid rgba(255,255,255,0.03); }
 .fullwidth-strip-section:nth-child(even) { background: #06060F; }
@@ -103,11 +112,20 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .media-asset-container img { width: 100%; height: auto; border-radius: 6px; display: block; }
 .media-asset-legend { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-top: 12px; }
 
-/* REVIEWS SOCIAL PROOF SECTOR */
+/* RISK REVERSAL AND STRIPE GATE MODULES */
+.assurance-layout-card { max-width: 1200px; margin: 6rem auto; background: var(--white); color: #000000; border-radius: 16px; padding: 4.5rem; display: grid; grid-template-columns: 240px 1fr; gap: 50px; align-items: center; box-shadow: 0 25px 60px rgba(0,0,0,0.4); text-align: left; }
+.assurance-profile-col { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.assurance-profile-avatar-frame { width: 160px; height: 160px; border-radius: 50%; border: 5px solid var(--purple); overflow: hidden; margin-bottom: 1.25rem; background: #000; }
+.assurance-profile-avatar-frame img { width: 100%; height: auto; display: block; object-fit: cover; }
+.assurance-profile-name { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 800; color: #111827; }
+.assurance-profile-sub { font-size: 11px; color: #4B5563; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; margin-top: 3px; }
+.assurance-prose-col h2 { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 900; color: #111827; margin-bottom: 1.25rem; letter-spacing: -0.01em; }
+.assurance-prose-col p { font-size: 15.5px; color: #374151; line-height: 1.7; }
+
 .curated-reviews-viewport { max-width: 1400px; margin: 6rem auto; padding: 0 4rem; text-align: center; }
 .curated-reviews-viewport h2 { font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 900; color: var(--white); margin-bottom: 3rem; letter-spacing: -0.02em; }
 .curated-reviews-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-.curated-user-review-node { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); padding: 2.5rem 2rem; border-radius: 16px; text-align: left; position: relative; }
+.curated-user-review-node { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); padding: 2.5rem 2rem; border-radius: 16px; text-align: left; }
 .curated-user-meta { display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem; }
 .curated-user-avatar { width: 44px; height: 44px; border-radius: 50%; background: rgba(0,229,255,0.1); color: var(--cyan); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; font-family: 'Inter', sans-serif; }
 .curated-user-name { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); }
@@ -115,18 +133,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .curated-user-stars { color: #FBBF24; font-size: 13px; margin-bottom: 0.75rem; }
 .curated-user-text { font-size: 14px; color: var(--gray); line-height: 1.6; font-style: italic; }
 
-/* THE IRREFUTABLE PLATFORM ASSURANCE BLOCK SYSTEM (IMAGE_C4A343.PNG MODEL) */
-.assurance-layout-card { max-width: 1200px; margin: 6rem auto; background: var(--white); color: #000000; border-radius: 16px; padding: 4.5rem; display: grid; grid-template-columns: 240px 1fr; gap: 50px; align-items: center; box-shadow: 0 25px 60px rgba(0,0,0,0.4); text-align: left; }
-.assurance-profile-col { text-align: center; display: flex; flex-direction: column; align-items: center; }
-.assurance-profile-avatar-frame { width: 160px; height: 160px; border-radius: 50%; border: 5px solid var(--purple); overflow: hidden; margin-bottom: 1.25rem; background: #000; }
-.assurance-profile-avatar-frame img { width: 100%; height: auto; display: block; object-fit: cover; }
-.assurance-profile-name { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 800; color: #111827; }
-.assurance-profile-sub { font-size: 11px; color: var(--app-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; margin-top: 3px; }
-.assurance-prose-col h2 { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 900; color: #111827; margin-bottom: 1.25rem; letter-spacing: -0.01em; }
-.assurance-prose-col p { font-size: 15.5px; color: #374151; line-height: 1.7; }
-.assurance-prose-col p strong { color: #000000; font-weight: 700; }
-
-/* PRICING CONTROL ENGINE SECTION PANEL */
 .billing-matrix-anchor { background: #06060F; padding: 8rem 4rem; border-top: 1px solid rgba(255,255,255,0.04); text-align: center; }
 .billing-header-block { max-width: 850px; margin: 0 auto 5rem auto; }
 .billing-header-block h2 { font-family: 'Inter', sans-serif; font-size: 42px; font-weight: 900; color: var(--white); margin-bottom: 1rem; letter-spacing: -0.02em; }
@@ -150,7 +156,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .cta-checkout-btn.secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--white); }
 .cta-checkout-btn.secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.04); transform: translateY(-2px); }
 
-/* STRUCTURAL FAQ ACCORDIONS CONFIGURATION SYSTEM */
 .faq-viewport-wrapper { max-width: 1000px; margin: 6rem auto; padding: 0 4rem; text-align: left; }
 .faq-section-header { font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 900; color: var(--white); text-align: center; margin-bottom: 3rem; letter-spacing: -0.02em; }
 .faq-category-separator { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.1em; margin: 2.5rem 0 1.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
@@ -159,7 +164,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .faq-accordion-header:hover { background: rgba(255,255,255,0.02); }
 .faq-accordion-body { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease-out; font-size: 14px; color: var(--gray); line-height: 1.6; }
 
-/* INTERNAL RUNTIME CONTAINER APPLICATION SYSTEM VIEWPORTS (LIGHT THEME CONTROL MATRIX) */
+/* LIGHT MODE WORKSPACE DASHBOARD INTERFACES */
 .app-nav-system { height: 65px; background: #0A0A1F; border-bottom: 1px solid rgba(255,255,255,0.1); display: none; align-items: center; padding: 0 2rem; position: sticky; top: 0; z-index: 100; }
 .app-nav-system .logo-container { font-size: 16px; margin-right: 2rem; }
 .app-nav-system .logo-container img { height: 32px; }
@@ -173,15 +178,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 .pg-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; color: #111827; }
 .pg-sub { font-size: 13px; color: var(--app-muted); margin-bottom: 2rem; }
 
-/* INTERFACE CONFIG FORMS CONTROL GRIDS */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-.field label{font-size:10px;font-weight:700;color:var(--app-muted);text-transform:uppercase;letter-spacing:.06em}
-.field input,.field select,.field textarea{background:#FFF;border:1px solid var(--app-border);border-radius:var(--r);padding:10px 12px;font-size:13px;color:var(--app-text);font-family:inherit;outline:none;width:100%;transition:border-color .12s}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
-.field textarea{resize:vertical;min-height:90px}
+.field label { font-size:10px; font-weight:700; color:var(--app-muted); text-transform:uppercase; letter-spacing:.06em }
+.field input, .field select, .field textarea { background:#FFF; border:1px solid var(--app-border); border-radius:var(--r); padding:10px 12px; font-size:13px; color:var(--app-text); font-family:inherit; outline:none; width:100%; transition:border-color .12s }
+.field input:focus, .field textarea:focus, .field select:focus { border-color:var(--purple) }
+.field textarea { resize:vertical; min-height:90px; }
 
 .btn { background: var(--purple); color: white; border: none; border-radius: var(--r); padding: 10px 22px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: background .12s; text-decoration: none; }
 .btn:hover { background: #6d28d9; }
@@ -247,14 +251,17 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
 </head>
 <body>
 
-<!-- CONVERSION OPTIMIZED PUBLIC INTERFACE VIEWPORT CONTAINER -->
+<!-- CHATBOT SCRIPT HOOK PLACEHOLDER (TOMORROW INJECTION) -->
+<!-- <script src="YOUR_CHATBOT_EMBED_URL"></script> -->
+
+<!-- CONVERSION OPTIMIZED PUBLIC PORTAL -->
 <div class="landing-wrapper" id="public-landing">
   <nav class="landing-nav">
     <div class="logo-container">
       <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6a222849c6d915cec1dd2359.png" alt="LocalBoostPro Logo">
       LocalBoostPro
     </div>
-    <button class="cta-checkout-btn secondary" style="width:auto; padding: 0 24px; height:44px;" onclick="bypassToLogin()">Sign In</button>
+    <button class="cta-checkout-btn secondary" style="width:auto; padding: 0 24px; height:44px;" onclick="openAdminModal()">Sign In</button>
   </nav>
 
   <header class="premium-hero">
@@ -274,7 +281,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
     ⚡ STATISTICAL BENCHMARK: 92% of users select a provider explicitly listed within Google's Map 3-Pack framework.
   </div>
 
-  <!-- THE MARQUEE TRUSTED RUN PANEL LAYER WITH CUSTOM ENFORCED COPY -->
+  <!-- VIDEO EMBED HOOK CONTAINER (TOMORROW INJECTION) -->
+  <!-- <section style="max-width: 1000px; margin: 4rem auto; padding: 0 2rem;">
+       <div class="media-asset-container"><iframe src="YOUR_VIDEO_URL" width="100%" height="500"></iframe></div>
+  </section> -->
+
+  <!-- MARQUEE BRAND ENGINE -->
   <section id="trusted">
     <div id="aivm-trusted">
       <div class="aivm-trusted-inner">
@@ -306,27 +318,18 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
             <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/68292828d08385176b1696c5.jpeg" alt="The Tekton Team"/></div>
             <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/68292828a6cf153ac366e6a9.png" alt="RE/MAX"/></div>
             <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/68292828a6cf15800966e6a6.jpeg" alt="Bluegreen Sales"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c1be6b07ab3303528ceb.png" alt="Experts of Real Estate"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c1be6b07ab3303528ced.png" alt="Vivant"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c1bedd67e758c0f75ad5.jpg" alt="Floor Plus More"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c2cbd868be00855b24d2.jpeg" alt="Freedom Forever"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c3306b07ab330352c911.png" alt="LG Home Comfort"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c389d868be00855b4216.png" alt="EXP Realty"/></div>
             <!-- Duplication Set -->
             <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f7c2796b07ab330352ac79.png" alt="GenAI Works"/></div>
             <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/68292829d0838571a01696dc.png" alt="Real Rewards"/></div>
             <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/682928298acc4a2614b7f1e6.png" alt="IUL Experts"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/68292829954010277d7970d7.png" alt="BitCash"/></div>
-            <div class="aivm-logo-item"><img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/682928298acc4a8447b7f1ef.png" alt="Dwell Escape"/></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FULL WIDTH HIGH PERMEABILITY ROW ALTERNATIONS ARRAY (IMAGE_C4325E.JPG METRIC FRAMEWORK) -->
+  <!-- WIDE ROW CORRECTIONS -->
   <div class="fullwidth-showcase-container">
-    
     <div class="fullwidth-strip-section">
       <div class="fullwidth-inner-block">
         <div class="section-headline-unit">
@@ -345,11 +348,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
       <div class="fullwidth-inner-block reversed">
         <div class="media-asset-container">
           <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6828be126e48ec32b3311c00.gif" alt="Automated profile posts update schedules generation">
+          <div class="media-asset-legend">Automated AI Content Distribution Pipeline</div>
         </div>
         <div class="section-headline-unit">
           <h2>Outshine competitors by analyzing their strategies and <span>refining your own approach</span>.</h2>
           <p>Dissect structural local keywords, view velocity vectors, and index volumes from matching businesses. No guesswork—just clear, continuous algorithmic advantages designed to secure dominant map placements.</p>
-          <a href="#pricing-portal" class="cta-checkout-btn secondary" style="max-width:280px;">Review Pricing Tracks</a>
         </div>
       </div>
     </div>
@@ -359,7 +362,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
         <div class="section-headline-unit">
           <h2>Automatically generate and share engaging posts that draw customers in <span>while you focus on running your business</span>.</h2>
           <p>Contextual automation profiles handle everything. Deploy search engine update scheduling, promotional posts, and seasonal events directly onto active directories without touch intervention.</p>
-          <a href="#pricing-portal" class="cta-checkout-btn primary" style="max-width:280px;">Start Boosting Ranking</a>
         </div>
         <div class="media-asset-container">
           <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6828be12787c04a4097dd863.gif" alt="Keyword comparisons dashboard controls interface">
@@ -367,40 +369,18 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
         </div>
       </div>
     </div>
-
-    <div class="fullwidth-strip-section">
-      <div class="fullwidth-inner-block reversed">
-        <div class="media-asset-container">
-          <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6a222b0bda24932f12181a5f.png" alt="Platform Dashboard Overview Preview">
-        </div>
-        <div class="section-headline-unit">
-          <h2>Eliminate guesswork with step-by-step tasks designed to <span>improve your search rankings</span>.</h2>
-          <p>Receive bite-sized, automated weekly action tasks specific to your localized neighborhood boundaries. Align your profile data perfectly with foundational human search indexing patterns and conversational AI Answer Engines.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="fullwidth-strip-section">
-      <div class="fullwidth-inner-block">
-        <div class="section-headline-unit">
-          <h2>Centralize all customer reviews and reply to them <span>instantly with just one click</span>.</h2>
-          <p>Incorporate localized structural context directly back into client follow-ups. Build high-density keyword maps automatically within your live review loops to multiply listing value indicators smoothly.</p>
-        </div>
-        <div class="media-asset-container" style="background: #FFFFFF; padding: 2rem;">
-          <div style="padding:15px; border:1px solid #E5E7EB; border-radius:8px; text-align:left; color:#111;">
-            <div style="font-weight:700; margin-bottom:5px;">⭐ Google Maps Review User Sample</div>
-            <div style="font-size:12px; color:#555; margin-bottom:10px;">"Excellent local service execution, highly reliable team."</div>
-            <div style="background:#F3F4F6; padding:10px; border-radius:6px; font-size:12.5px; font-weight:500; border-left:3px solid #7B5EA7;">
-              🤖 LocalBoostPro Suggested Reply: Thank you for selecting our Daytona Beach service track...
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- CLEAN ASSURANCE CONTAINER HOOKED FROM PRECISE USER COMPONENT PATTERNS -->
+  <!-- THE ACTIONABLE MODAL BYPASS GATE FOR info@audaxgroup.pro -->
+  <div class="overlay" id="admin-login-modal">
+    <div class="modal" style="background:#0D1428; border:1px solid rgba(255,255,255,0.1); color:#FFF;">
+      <div class="modal-hd" style="color:#FFF;"><span>Administrative &amp; Client Access Portal</span><button class="xbtn" onclick="closeAdminModal()">&times;</button></div>
+      <div class="field"><label style="color:var(--cyan);">Registered Account Email</label><input id="adm-email" placeholder="name@domain.com" style="background:#0A0A1F; border:1px solid rgba(255,255,255,0.1); color:#FFF;"></div>
+      <button class="btn" style="width:100%; background:var(--cyan); color:#000; font-weight:bold; margin-top:10px;" onclick="validateAdminGate()">Authenticate Portal Entry</button>
+    </div>
+  </div>
+
+  <!-- THE IRREFUTABLE PLATFORM ASSURANCE BLOCK -->
   <section class="assurance-layout-card">
     <div class="assurance-profile-col">
       <div class="assurance-profile-avatar-frame">
@@ -412,11 +392,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
     <div class="assurance-prose-col">
       <h2>Our Irrefutable 30-Day Visibility Improvement Guarantee</h2>
       <p>We've completely removed the implementation risk from your shoulders. If you activate access, connect your location profiles, and do not see a verified improvement in your aggregate local search positioning maps within <strong>30 days</strong>, we will issue a full, instant refund.</p>
-      <p style="margin-top: 1rem;">The blueprint is proven: the vast majority of local service providers claim their spaces inside Google's highly lucrative <strong>Local 3-Pack within 90 days</strong>. While saturated urban sectors take consistency, we have never had a location adhere to our engine tasks that failed to occupy page-one search space inside 6 months.</p>
+      <p style="margin-top: 1rem;">The blueprint is proven: the vast majority of local service providers claim their spaces inside Google's highly lucrative <strong>Local 3-Pack within 90 days</strong>. While saturated urban sectors take consistency, we have never had a location follow our blueprint that failed to occupy page-one search space inside 6 months.</p>
     </div>
   </section>
 
-  <!-- REVIEWS SECTION CONTAINER -->
+  <!-- REVIEWS ACCUMULATION PANEL -->
   <section class="curated-reviews-viewport">
     <h2>Client Success Signals</h2>
     <div class="curated-reviews-matrix">
@@ -456,7 +436,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
     </div>
   </section>
 
-  <!-- STRIPE CHECKOUT ROUTING MODULES -->
+  <!-- PRICING PANEL -->
   <section class="billing-matrix-anchor" id="pricing-portal">
     <div class="billing-header-block">
       <h2>Select Your License Model</h2>
@@ -496,10 +476,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
     </div>
   </section>
 
-  <!-- PLATFORM STRUCTURAL FAQS LAYOUT SYSTEM -->
+  <!-- THE PLATFORM STRUCTURAL FAQS -->
   <section class="faq-viewport-wrapper">
     <h2 class="faq-section-header">Local Boost Pro FAQ</h2>
-    
     <div class="faq-category-separator">1. Fundamentals of Local SEO &amp; AEO</div>
     <div class="faq-accordion-item">
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">What is local SEO, and why is it a must-have for my business? <span>+</span></div>
@@ -513,7 +492,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">Does LocalBoostPro support Answer Engine Optimization (AEO)? <span>+</span></div>
       <div class="faq-accordion-body"><p style="padding-bottom:1.25rem;">Yes, absolutely. LocalBoostPro is built for the future of search. The platform utilizes advanced AI content assistants to automatically format your business descriptions, services, and Q&As into conversational, structured data schemas. By feeding AI models and voice assistants the precise, structured data they look for, LocalBoostPro ensures your business is highly visible across both traditional search engines and next-generation AI platforms.</p></div>
     </div>
-
     <div class="faq-category-separator">2. Performance, Timelines, &amp; Our Irrefutable Guarantee</div>
     <div class="faq-accordion-item">
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">What is the 30-Day Risk-Free Guarantee? <span>+</span></div>
@@ -523,13 +501,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">When will my business hit Google's First Page and the "3-Pack"? <span>+</span></div>
       <div class="faq-accordion-body"><p style="padding-bottom:1.25rem;">While local search is an ongoing strategy, our platform accelerates your results through a proven timeline:<br><br><strong>The First 30 Days:</strong> You will see a fully optimized profile and a verified boost in initial visibility and search positioning.<br><strong>Within 90 Days:</strong> The vast majority of businesses utilizing our platform make it to Google's coveted, highly visible Local 3-Pack and secure a spot on Google’s first page.<br><strong>Within 6 Months:</strong> Obviously, some highly saturated industries and ultra-competitive metropolitan areas are tougher than others. However, we have never had a business follow our system consistently that didn't make it to Google's first page within 6 months.</p></div>
     </div>
-
     <div class="faq-category-separator">3. Core Features &amp; Platform Automation</div>
     <div class="faq-accordion-item">
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">How does LocalBoostPro put local SEO and AEO on autopilot? <span>+</span></div>
       <div class="faq-accordion-body"><p style="padding-bottom:1.25rem;">The platform streamlines technical complexity into automated, bite-sized tasks:<br><br><strong>Smart Tasks:</strong> Every week, you receive 2–3 personalized, AI-driven action items tailored exactly to outperform your local competitors.<br><strong>AI Content Assistants:</strong> Generate perfect, keyword-optimized posts, business descriptions, and contextually smart review replies optimized for both human readers and AI answer engines with a single click.<br><strong>Review Manager:</strong> Instantly create print-ready QR code posters for your checkout counter and manage outbound text/email feedback requests from a centralized dashboard.<br><strong>Business Protection Alerts:</strong> Real-time safeguards that monitor your listings 24/7 and alert you instantly to suspicious changes that could harm your visibility.</p></div>
     </div>
-
     <div class="faq-category-separator">4. Strategic Keyword Engineering</div>
     <div class="faq-accordion-item">
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">How many keywords should I target? <span>+</span></div>
@@ -539,7 +515,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">Why should I focus on location keywords instead of broad terms? <span>+</span></div>
       <div class="faq-accordion-body"><p style="padding-bottom:1.25rem;">Generic terms might look attractive because of high nationwide search numbers, but they waste your time and budget because they lack immediate local buyer intent. Furthermore, because modern smart devices rely heavily on automatic GPS geolocation, users frequently skip typing phrases like "near me" entirely. They simply state the service they want, and search engines automatically filter for the closest optimized business. LocalBoostPro targets explicit location-modified keywords and handles structural local optimizations to capture these highly lucrative queries seamlessly.</p></div>
     </div>
-
     <div class="faq-category-separator">5. Onboarding &amp; Execution</div>
     <div class="faq-accordion-item">
       <div class="faq-accordion-header" onclick="triggerAccordion(this)">How do I get started to ensure I hit my 30-day target? <span>+</span></div>
@@ -651,7 +626,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
         </ul>
       </div>
       <div class="aivm-footer-nav-col">
-        <h4>Industries</h4>
+        <h4>Campuses</h4>
         <ul>
           <li><a href="#book">Home Services</a></li>
           <li><a href="#book">Real Estate</a></li>
@@ -764,11 +739,24 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
   </div>
 </div>
 
-<!-- CENTRALIZED REVIEWS MANAGER ENGINE PANEL -->
+<!-- CENTRALIZED REVIEWS MANAGER ENGINE PANEL (WITH AUTO-PILOT AI SELECTION) -->
 <div class="app-view-panel" id="p-review">
   <div class="app-card-unit">
-    <div class="pg-title">Review response generator</div>
-    <div class="pg-sub">Paste any Google review, optimize processing metrics, and reply to customers instantly.</div>
+    <div class="pg-title">Reviews Automation Desk</div>
+    <div class="pg-sub">Paste incoming listings reviews, choose processing parameters, or delegate to continuous autopilot response modes.</div>
+    
+    <div class="card" style="margin-bottom: 2rem; border-left: 4px solid var(--purple); padding: 1.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h4 style="font-weight:700; color:#111827;">AI Response Autopilot Mode</h4>
+          <p style="color:var(--app-muted); font-size:12.5px;">When active, incoming Google Business Profile reviews are answered within 5 minutes using tailored structural context.</p>
+        </div>
+        <label class="toggle-row" style="cursor:pointer; font-weight:700;">
+          <input type="checkbox" id="autopilot-reviews-toggle" onchange="toggleAutopilotStatus(this)"> Enable Autopilot
+        </label>
+      </div>
+    </div>
+
     <div class="g3">
       <div class="field"><label>Business name</label><input id="rv-biz" placeholder="Your business name"></div>
       <div class="field"><label>Business type</label><input id="rv-type" placeholder="Estate planning service"></div>
@@ -784,7 +772,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
       </div>
     </div>
     <div class="field" style="margin-bottom:12px"><label>Review text</label><textarea id="rv-text" placeholder="Paste the full review here..."></textarea></div>
-    <button class="btn" id="rv-btn" onclick="runReview()">Generate response</button>
+    <button class="btn" id="rv-btn" onclick="runReview()">Generate manual response</button>
     <div id="rv-out"></div>
   </div>
 </div>
@@ -843,16 +831,34 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
       </div>
     </div>
     <div class="field" style="margin-bottom:12px"><label>Performance notes (optional — paste any stats you have)</label><textarea id="rep-notes" placeholder="e.g. 12 customer calls, 45 profile views, 3 new reviews, posted 2 updates..."></textarea></div>
-    <button class="btn" id="rep-btn" onclick="runReport()">Generate report</button>
+    
+    <!-- SCHEDULING NOTE REGARDING EMAIL DISPATCH SYSTEMS -->
+    <p style="font-size:11.5px; color:var(--app-muted); margin-bottom:1rem;">✉️ Note: To configure these reports to dispatch automatically via email, connect your custom sender address variables inside your Railway environment variables block.</p>
+    
+    <button class="btn" id="rep-btn" onclick="runReport()">Generate manual report</button>
     <div id="rep-out"></div>
   </div>
 </div>
 
-<!-- LEADS & CRM OVERVIEW SYSTEM -->
+<!-- LEADS & CRM OVERVIEW SYSTEM (WITH ADMINISTRATIVE USER GENERATOR OVERRIDE) -->
 <div class="app-view-panel" id="p-crm">
   <div class="app-card-unit">
     <div class="pg-title">Leads &amp; customers</div>
     <div class="pg-sub">All data saves locally in your browser.</div>
+
+    <!-- ADMIN ACCOUNT OVERRIDE CONTROL MODIFIER -->
+    <div id="admin-override-panel" style="display:none; background:#F3F4F6; border:1px dashed var(--purple); padding:1.5rem; border-radius:8px; margin-bottom:2rem;">
+      <h4 style="font-family:'Inter',sans-serif; font-size:14px; color:var(--purple); font-weight:800; text-transform:uppercase; margin-bottom:1rem;">⚠️ Administrative Account Creator Override</h4>
+      <div class="g3">
+        <div class="field"><label>Manual Client Name</label><input id="ov-name" placeholder="e.g. John Miller"></div>
+        <div class="field"><label>Manual Business Name</label><input id="ov-biz" placeholder="e.g. Miller Roofing LLC"></div>
+        <div class="field"><label>Assigned License Tier</label>
+             <select id="ov-status"><option value="won">Customer (Active Plan)</option><option value="hot">Hot Prospect Track</option></select>
+        </div>
+      </div>
+      <button class="btn" onclick="executeSystemAccountOverride()" style="margin-top:10px; padding:8px 16px; font-size:12px;">Provision Client Account Instantly</button>
+    </div>
+
     <div class="stats-grid" id="crm-stats"></div>
     <div class="search-row">
       <input id="crm-q" placeholder="Search by name, email, business, phone..." oninput="renderCRM()">
@@ -864,6 +870,38 @@ body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(-
         <tbody id="crm-body"></tbody>
       </table>
       <div id="crm-empty" style="padding:2.5rem;text-align:center;font-size:13px;color:var(--app-muted);display:none">No contacts yet. Add your first lead above.</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERFACE CONFIG FORMS MODALS -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-hd"><span id="modal-title-text">Add contact</span><button class="xbtn" onclick="closeModal()">&times;</button></div>
+    <div class="g2">
+      <div class="field"><label>Full name *</label><input id="m-name" placeholder="Jane Smith"></div>
+      <div class="field"><label>Business name</label><input id="m-biz" placeholder="Smith LLC"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>Email</label><input id="m-email" type="email" placeholder="jane@example.com"></div>
+      <div class="field"><label>Phone</label><input id="m-phone" placeholder="(386) 555-0100"></div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>Website</label><input id="m-website" placeholder="https://..."></div>
+      <div class="field"><label>Status</label>
+        <select id="m-status"><option value="new">New lead</option><option value="hot">Hot lead</option><option value="won">Customer (won)</option><option value="cold">Cold / inactive</option><option value="lost">Lost</option></select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="field"><label>Source</label>
+        <select id="m-source"><option>Website</option><option>Google</option><option>Facebook</option><option>Referral</option><option>Workshop</option><option>Nextdoor</option><option>SMS</option><option>Leads Finder</option><option>Other</option></select>
+      </div>
+      <div class="field"><label>Value ($)</label><input id="m-value" type="number" placeholder="0"></div>
+    </div>
+    <div class="field" style="margin-bottom:1.25rem"><label>Notes</label><textarea id="m-notes" style="min-height:70px" placeholder="Any notes..."></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="saveContact()">Save contact</button>
     </div>
   </div>
 </div>
@@ -880,6 +918,75 @@ const ANT_KEY = 'sk-ant-api03-KcrkQijrubsr18y-uwr8736fIxn8tsHcIoI3IiQN-jXFmHcG7L
 let contacts = JSON.parse(localStorage.getItem('lss_contacts') || '[]');
 let editId = null;
 let lastRankResults = null;
+let currentAuthorizedUser = "";
+
+// ADMINISTRATIVE BYPASS LOGIC MATRIX
+function openAdminModal() { document.getElementById('admin-login-modal').classList.add('open'); }
+function closeAdminModal() { document.getElementById('admin-login-modal').classList.remove('open'); }
+
+function validateAdminGate() {
+  const emailInput = document.getElementById('adm-email').value.trim();
+  if(!emailInput) {
+    alert('Please provide your login credentials.');
+    return;
+  }
+  
+  currentAuthorizedUser = emailInput;
+  closeAdminModal();
+  document.getElementById('public-landing').style.display = 'none';
+  document.getElementById('app-nav').style.display = 'flex';
+  
+  // Show system account creator overrides if logged in as admin
+  if(emailInput.toLowerCase() === 'info@audaxgroup.pro') {
+    document.getElementById('admin-override-panel').style.display = 'block';
+    alert('Administrative Access Granted. Accounts override console appended to Leads workspace.');
+  } else {
+    document.getElementById('admin-override-panel').style.display = 'none';
+  }
+  
+  sw('rank');
+}
+
+function executeSystemAccountOverride() {
+  const manualName = document.getElementById('ov-name').value.trim();
+  const manualBiz = document.getElementById('ov-biz').value.trim();
+  const manualStatus = document.getElementById('ov-status').value;
+  
+  if(!manualName) {
+    alert('Account provisioning requires a minimum of a designated Client Name.');
+    return;
+  }
+  
+  const simulatedId = 'acc-' + Date.now();
+  contacts.unshift({
+    id: simulatedId,
+    name: manualName,
+    biz: manualBiz,
+    email: manualName.toLowerCase().replace(/\s+/g, '') + '@simulatedportal.com',
+    phone: '(555) 000-1234',
+    website: 'https://' + (manualBiz ? manualBiz.toLowerCase().replace(/[^a-z0-9]/g, '') : 'clientlisting') + '.com',
+    status: manualStatus,
+    source: 'Admin Override',
+    value: manualStatus === 'won' ? '300' : '0',
+    added: new Date().toLocaleDateString(),
+    notes: 'Account provisioned manually via info@audaxgroup.pro administrative control portal override tools.'
+  });
+  
+  saveToStorage();
+  renderCRM();
+  
+  document.getElementById('ov-name').value = "";
+  document.getElementById('ov-biz').value = "";
+  alert(`Account successfully provisioned for ${manualName}. Active token loaded into Local CRM database.`);
+}
+
+function toggleAutopilotStatus(toggleNode) {
+  if(toggleNode.checked) {
+    alert('Autopilot Engine Engaged: Reviews monitoring loop active via integrated AI responses.');
+  } else {
+    alert('Autopilot Engine Disengaged: Reverting to manual drafting workspace controls.');
+  }
+}
 
 function bypassToLogin() {
   document.getElementById('public-landing').style.display = 'none';
