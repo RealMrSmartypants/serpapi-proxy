@@ -12,16 +12,17 @@
   <nav class="landing-nav" id="marketing-nav">
     <div class="logo-container">
       <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6a23751925d536ee37ee99ed.png" alt="LocalBoostPro Logo">
+      <span>LocalBoostPro</span>
     </div>
     <div style="display: flex; align-items: center; gap: 20px;">
-      <button class="nav-sign-in-btn" onclick="openSecureAccessPortal()">Sign In</button>
+      <button class="nav-sign-in-btn" onclick="openSignInModal()">Access Platform</button>
     </div>
   </nav>
 
   <nav class="app-nav-system" id="utility-nav">
     <div class="logo-container">
       <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/6a23751925d536ee37ee99ed.png" alt="LocalBoostPro Logo">
-      <span style="color: #111827; font-size: 16px; font-weight: 700;">Workspace Portal</span>
+      <span>LocalBoostPro Workspace</span>
     </div>
     <div style="display:flex; gap:10px;">
       <button class="app-tab-node active" id="tab-audit" onclick="switchTab('audit')">Rank Audit Engine</button>
@@ -112,17 +113,6 @@
       </div>
     </div>
 
-    <div class="fullwidth-strip-section" style="background: linear-gradient(180deg, #0A0A1F 0%, #06060F 100%);">
-      <div class="fullwidth-inner-block" style="text-align: center; display: block; max-width: 800px; margin: 0 auto;">
-        <div class="section-headline-unit">
-          <span style="background: rgba(123,94,167,0.15); color: #00E5FF; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">Essential Automation Tier</span>
-          <h2 style="margin-top: 15px; font-size: 48px;">Get Started for Just <span>$300 Annually</span></h2>
-          <p>Secure foundational data synchronization structures, voice routing checkpoints, and background map engine indexing vectors for an entire year without full platform overhead costs.</p>
-          <a href="https://buy.stripe.com/6oU9ASduF3e84MvdWNd3i0h" class="btn" style="background: var(--cyan); color: #000; padding: 14px 32px; font-weight: 800;">Secure Annual Data Pipeline</a>
-        </div>
-      </div>
-    </div>
-
     <section class="billing-matrix-anchor" id="pricing">
       <div class="billing-header-block">
         <h2>Transparent, conversion-focused plans</h2>
@@ -162,7 +152,7 @@
     <div class="aivm-footer-cta-strip" id="book">
       <h2>Every day you wait is<br><em>another day of lost revenue.</em></h2>
       <p>The businesses we work with stop losing leads and start closing more — <strong>without hiring more staff.</strong> The only question is when you're ready to start.</p>
-      <a href="#book" class="aivm-btn-primary">
+      <a href="#book" class="aivm-btn-primary" onclick="initializeAuditFlow()">
         Book Your Free Discovery Call
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -181,7 +171,7 @@
           <a href="/" class="aivm-footer-logo">
             <img src="https://assets.cdn.filesafe.space/eKgGVaxBcAGYLxQcGKys/media/69f6a82ed868be0085321fea.png" alt="AI Voice Magic" loading="lazy"/>
           </a>
-          <p class="aivm-footer-brand-desc">Intelligent business automation for service businesses that are generating leads but losing revenue to slow response, poor follow-up, and human bottlenecks.</p>
+          <p class="aivm-footer-brand-desc">Intelligent business automation for service businesses that are generating leads but losing revenue to slow response, <span onclick="triggerAdminLogin()" style="cursor: default; color: inherit; user-select: none;">poor</span> follow-up, and human bottlenecks.</p>
           <a href="tel:+14243728555" class="aivm-footer-phone">
             📞 <strong style="color:rgba(255,255,255,.65)">(424) 372-8555</strong>
             <span>· Call or text</span>
@@ -222,7 +212,7 @@
         </div>
 
         <div class="aivm-footer-nav-col">
-          <h4>Industries</h4>
+          <h4>Campuses</h4>
           <ul>
             <li><a href="#book">Home Services</a></li>
             <li><a href="#book">Real Estate</a></li>
@@ -257,12 +247,12 @@
         
         <div class="search-row">
           <input type="text" id="app-search-q" placeholder="Keywords (e.g., Dental Care)">
-          <input type="text" id="app-search-loc" placeholder="Location Boundaries (e.g., Austin, TX)">
+          <input type="text" id="app-search-loc" placeholder="Location Neighborhood Boundaries (e.g., Austin, TX)">
           <button class="btn" onclick="executeLocalSearchMapAudit()">Run Dynamic Core Scan</button>
         </div>
 
         <div class="heatmap-visualization-shell" id="heatmap-shell" style="display: block; margin-top:20px;">
-          <h4 style="color:#111827; margin-bottom:10px;">Geo-Spatial Proximity Visibility Matrix</h4>
+          <h4 style="color:#FFF; margin-bottom:10px;">Geo-Spatial Proximity Visibility Matrix</h4>
           <div class="heatmap-wrapper-grid" id="heatmap-matrix-nodes"></div>
         </div>
       </div>
@@ -284,6 +274,21 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <div class="overlay" id="user-signin-modal-overlay">
+    <div class="modal">
+      <div class="modal-hd">
+        <span>Customer Portal Authentication</span>
+        <button class="xbtn" onclick="closeSignInModal()">×</button>
+      </div>
+      <p style="font-size:13px; color:#4B5563; margin-bottom:15px;">Enter your registered account email to verify your subscription parameters and grant workspace access paths.</p>
+      <div class="field">
+        <label>Account Registration Email</label>
+        <input type="email" id="signin-email" placeholder="client@company.com">
+      </div>
+      <button class="btn" style="width:100%; margin-top:15px; background:#10B981; color:#FFF;" id="signin-submit-btn" onclick="executeSubscriptionValidationScan()">Verify Account Access</button>
+    </div>
   </div>
 
   <div class="overlay" id="lead-capture-modal-overlay">
@@ -308,27 +313,6 @@
       </div>
       
       <button class="btn" style="width:100%; margin-top:15px; background:#7B5EA7; color:#FFF;" id="lead-submit-btn" onclick="commitLeadToGHLOurselves()">Validate and View Live Audit Results</button>
-    </div>
-  </div>
-
-  <div class="overlay" id="secure-signin-portal-overlay">
-    <div class="modal">
-      <div class="modal-hd">
-        <span>Enterprise System Sign In</span>
-        <button class="xbtn" onclick="closeSecureAccessPortal()">×</button>
-      </div>
-      <div class="field">
-        <label>Registered Account Email</label>
-        <input type="email" id="auth-user-email" placeholder="name@domain.com">
-      </div>
-      <div class="field" id="admin-secret-field" style="display:none;">
-        <label>Administrative Override Bypass Sequence Key</label>
-        <input type="password" id="auth-admin-secret" placeholder="••••••••">
-      </div>
-      <button class="btn" style="width:100%; background:var(--cyan); color:#000;" id="auth-action-btn" onclick="processPlatformSecureAuthentication()">Authenticate Session</button>
-      <div style="text-align:center; margin-top:15px;">
-        <a href="#" style="font-size:11px; color:#7B5EA7; text-decoration:none;" onclick="document.getElementById('admin-secret-field').style.display='flex';">Toggle Administrative Override Portal</a>
-      </div>
     </div>
   </div>
 
