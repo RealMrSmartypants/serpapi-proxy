@@ -1,235 +1,274 @@
-// GLOBAL PLATFORM APPLICATION STATE CONFIGURATION
-let currentView = 'audit';
-let temporalCachedBusinessName = '';
-let localizedContactsMemory = [];
+/**
+ * LocalBoostPro - Client Engine Architecture File
+ * File Context: Public client asset routing map (/public/app.js)
+ * Version: 3.0.0 (Integrated Authorization Gateways & Overrides)
+ */
 
-// Dynamic Routing System State Configuration
-function toggleAppState(isUserAuthenticated) {
-  const marketingNode = document.getElementById('marketing-view-wrapper');
-  const marketingNav = document.getElementById('marketing-nav');
-  const utilityNode = document.getElementById('application-workspace-wrapper');
-  const utilityNav = document.getElementById('utility-nav');
+// Global Application Application View Layout State Control
+let currentSessionToken = null;
+let currentAuthenticatedEmail = null;
 
-  if (isUserAuthenticated) {
-    marketingNode.style.display = 'none';
-    marketingNav.style.display = 'none';
-    utilityNode.style.display = 'block';
-    utilityNav.style.display = 'flex';
-    document.body.style.backgroundColor = "#F3F4F6";
-    renderCRMDataGrid();
-  } else {
-    marketingNode.style.display = 'block';
-    marketingNav.style.display = 'flex';
-    utilityNode.style.display = 'none';
-    utilityNav.style.display = 'none';
-    document.body.style.backgroundColor = "#0A0A1F";
-  }
+/**
+ * Initialization routing triggered on startup
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  injectAuthenticationModals();
+});
+
+/**
+ * Renders modal nodes cleanly to encapsulate all login, password demands, and resets inside a single shell
+ */
+function injectAuthenticationModals() {
+  if (document.getElementById("lbp-auth-modal")) return;
+
+  const modalHtml = `
+    <div id="lbp-auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10,10,31,0.9); z-index:99999; align-items:center; justify-content:center; font-family:'Poppins', sans-serif;">
+      <div style="background:#14142B; border:2px solid #00E5FF; padding:40px; border-radius:16px; width:100%; max-width:440px; position:relative; box-sizing:border-box; color:#FFF;">
+        <span onclick="toggleAuthModal(false)" style="position:absolute; top:15px; right:20px; cursor:pointer; color:#8892A4; font-size:20px;">&times;</span>
+        
+        <!-- View State 1: Primary Email Verification -->
+        <div id="auth-state-email">
+          <h3 style="margin-top:0; color:#00E5FF; font-size:22px;">Customer Portal Authentication</h3>
+          <p style="color:#8892A4; font-size:13.5px; line-height:1.5;">Enter your registered account email to verify your subscription parameters and grant workspace access paths.</p>
+          <div style="margin-bottom:20px;">
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Account Registration Email</label>
+            <input type="email" id="auth-input-email" style="width:100%; padding:14px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:8px; box-sizing:border-box;">
+          </div>
+          <button onclick="processEmailAuthenticationStep()" style="width:100%; padding:14px; background:#00E5FF; color:#000; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px;">Verify Account Parameters</button>
+        </div>
+
+        <!-- View State 2: Explicit Password Credentials Demand -->
+        <div id="auth-state-password" style="display:none;">
+          <h3 style="margin-top:0; color:#00E5FF; font-size:22px;">Security Verification</h3>
+          <p style="color:#8892A4; font-size:13.5px;">This test account or admin override route requires a password signature validation to pass the framework gate.</p>
+          <div style="margin-bottom:20px;">
+            <label id="lbl-authenticated-email" style="display:block; font-size:12px; color:#d4a017; font-weight:600; margin-bottom:12px;"></label>
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Account Security Password</label>
+            <input type="password" id="auth-input-password" style="width:100%; padding:14px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:8px; box-sizing:border-box;">
+          </div>
+          <button onclick="processPasswordAuthenticationStep()" style="width:100%; padding:14px; background:#7B5EA7; color:#FFF; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px; margin-bottom:12px;">Confirm Credentials</button>
+          <div style="text-align:center;"><span onclick="switchAuthViewState('reset')" style="color:#d4a017; font-size:12px; cursor:pointer; text-decoration:underline;">Forgot Password / Reset Settings?</span></div>
+        </div>
+
+        <!-- View State 3: Password Recovery System -->
+        <div id="auth-state-reset" style="display:none;">
+          <h3 style="margin-top:0; color:#d4a017; font-size:22px;">Reset System Password</h3>
+          <p style="color:#8892A4; font-size:13.5px;">Request a diagnostic verification reset key. In testing environments, tokens log output directly to your active runtime console container windows.</p>
+          <div id="reset-trigger-panel">
+            <button onclick="triggerPasswordResetOutbound()" style="width:100%; padding:12px; background:transparent; border:1px solid #444; color:#FFF; font-weight:600; border-radius:8px; cursor:pointer; font-size:13px; margin-bottom:15px;">Send Recovery Security Key</button>
+          </div>
+          <div id="reset-execution-panel" style="display:none; border-top:1px solid #2A2A40; padding-top:15px;">
+            <div style="margin-bottom:12px;">
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:4px;">Verification Recovery Key</label>
+              <input type="text" id="reset-input-token" placeholder="RST-XXXXXX" style="width:100%; padding:10px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:15px;">
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:4px;">New Account Password</label>
+              <input type="password" id="reset-input-newpass" style="width:100%; padding:10px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+            </div>
+            <button onclick="executePasswordResetConfirmation()" style="width:100%; padding:12px; background:#00E5FF; color:#000; font-weight:700; border-radius:6px; cursor:pointer; font-size:13px;">Commit Password Update</button>
+          </div>
+          <div style="text-align:center; margin-top:15px;"><span onclick="switchAuthViewState('email')" style="color:#8892A4; font-size:12px; cursor:pointer; text-decoration:underline;">Back to System Identity Search</span></div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  const shell = document.createElement('div');
+  shell.innerHTML = modalHtml;
+  document.body.appendChild(shell.firstElementChild);
 }
 
-// Interactive Sign In Overlay Controller Operations
-function openSignInModal() {
-  document.getElementById('user-signin-modal-overlay').classList.add('open');
+/**
+ * Global interface utility to toggle visibility thresholds
+ */
+function toggleAuthModal(show = true) {
+  const modal = document.getElementById("lbp-auth-modal");
+  if (!modal) return;
+  modal.style.display = show ? "flex" : "none";
+  if (show) switchAuthViewState('email');
 }
 
-function closeSignInModal() {
-  document.getElementById('user-signin-modal-overlay').classList.remove('open');
+/**
+ * Handle inner state visualization switching
+ */
+function switchAuthViewState(state) {
+  document.getElementById("auth-state-email").style.display = state === 'email' ? 'block' : 'none';
+  document.getElementById("auth-state-password").style.display = state === 'password' ? 'block' : 'none';
+  document.getElementById("auth-state-reset").style.display = state === 'reset' ? 'block' : 'none';
 }
 
-// Premium FAQ Accordion Interactive Management
-function toggleAccordionNode(buttonElement) {
-  const parentNode = buttonElement.parentElement;
-  const expansionContentPanel = buttonElement.nextElementSibling;
-  
-  if (parentNode.classList.contains('active-node')) {
-    expansionContentPanel.style.maxHeight = '0';
-    parentNode.classList.remove('active-node');
-  } else {
-    // Contract alternative nodes to ensure proper visual flow execution
-    document.querySelectorAll('.accordion-item').forEach(item => {
-      item.classList.remove('active-node');
-      if (item.querySelector('.accordion-content')) {
-        item.querySelector('.accordion-content').style.maxHeight = '0';
-      }
-    });
-    
-    expansionContentPanel.style.maxHeight = expansionContentPanel.scrollHeight + 'px';
-    parentNode.classList.add('active-node');
-  }
-}
-
-// Paid Subscription Verification Logic Check Routing
-async function executeSubscriptionValidationScan() {
-  const emailInput = document.getElementById('signin-email').value.trim();
-  const submitBtn = document.getElementById('signin-submit-btn');
-
-  if (!emailInput) {
-    alert('Please enter your account registration email address.');
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Checking Subscription Status...";
+/**
+ * Action: Validates account status parameters from provided text values
+ */
+async function processEmailAuthenticationStep() {
+  const emailVal = document.getElementById("auth-input-email").value;
+  if (!emailVal) return alert("Please supply an email identity point.");
 
   try {
     const response = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: emailInput })
+      body: JSON.stringify({ email: emailVal })
     });
-
     const data = await response.json();
 
-    if (response.ok && data.authorized) {
-      closeSignInModal();
-      toggleAppState(true);
-    } else {
-      alert(data.error || 'Access Denied: No up-to-date paid subscription trace mapping could be found.');
+    if (!response.ok && !data.requiresPassword) {
+      return alert(data.message || "Subscription token checking engine returned an invalid state.");
+    }
+
+    currentAuthenticatedEmail = emailVal.toLowerCase().trim();
+
+    if (data.requiresPassword) {
+      document.getElementById("lbl-authenticated-email").innerText = `Account Target: ${currentAuthenticatedEmail}`;
+      document.getElementById("auth-input-password").value = "";
+      return switchAuthViewState('password');
+    }
+
+    if (data.success) {
+      establishAuthorizedSession(data.token);
     }
   } catch (err) {
-    alert(`Authentication Error Node: ${err.message}`);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Verify Account Access";
+    alert("Connection breakdown when interfacing with validation engine pipeline arrays.");
   }
 }
 
-// Secret Hidden Administrative Interaction Sequence Link
-async function triggerAdminLogin() {
-  const adminEmail = prompt("Enter Administrative Root Key ID:");
-  if (!adminEmail) return;
+/**
+ * Action: Submits and confirms user passwords against database entries
+ */
+async function processPasswordAuthenticationStep() {
+  const passwordVal = document.getElementById("auth-input-password").value;
+  if (!passwordVal) return alert("Password configuration field must not be vacant.");
 
   try {
     const response = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: adminEmail })
+      body: JSON.stringify({ email: currentAuthenticatedEmail, password: passwordVal })
     });
-
     const data = await response.json();
 
-    if (response.ok && data.authorized && data.role === 'admin') {
-      alert("Administrative validation successful. Welcome back.");
-      toggleAppState(true);
+    if (response.ok && data.success) {
+      establishAuthorizedSession(data.token);
     } else {
-      alert("Access Refused: Invalid administrative tracking identifiers.");
+      alert(data.message || "Invalid account matching key pattern failed authorization logic.");
     }
   } catch (err) {
-    alert(`Administrative Pipeline failure: ${err.message}`);
+    alert("Failed processing network handshake across local credentials cluster.");
   }
 }
 
-// Internal Navigation Tab Handler Logic
-function switchTab(targetTabId) {
-  currentView = targetTabId;
-  document.querySelectorAll('.app-tab-node').forEach(node => node.classList.remove('active'));
-  document.querySelectorAll('.app-view-panel').forEach(view => view.classList.remove('active'));
-  
-  document.getElementById(`tab-${targetTabId}`).classList.add('active');
-  document.getElementById(`view-${targetTabId}`).classList.add('active');
+/**
+ * Action: Calls server route to issue code structures
+ */
+async function triggerPasswordResetOutbound() {
+  try {
+    const response = await fetch('/api/auth/reset-password-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentAuthenticatedEmail })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert("A diagnostic secure validation string was created successfully. Please locate the token key string inside your node terminal window.");
+      document.getElementById("reset-execution-panel").style.display = "block";
+    } else {
+      alert(data.message || "Could not execute requested state changes.");
+    }
+  } catch (err) {
+    alert("Error executing password system recovery pipeline actions.");
+  }
 }
 
-// Lead Audit Enticement Hook Capture Sequence
+/**
+ * Action: Confirms reset adjustments and modifies server database
+ */
+async function executePasswordResetConfirmation() {
+  const token = document.getElementById("reset-input-token").value;
+  const newPass = document.getElementById("reset-input-newpass").value;
+
+  if (!token || !newPass) return alert("All matching verification inputs require variable data values.");
+
+  try {
+    const response = await fetch('/api/auth/reset-password-confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentAuthenticatedEmail, resetToken: token, newPassword: newPass })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message || "Security metrics altered. Authenticate utilizing updated profile patterns.");
+      switchAuthViewState('password');
+      document.getElementById("reset-execution-panel").style.display = "none";
+    } else {
+      alert(data.message || "Reset request token confirmation validation rejection error.");
+    }
+  } catch (err) {
+    alert("Network response exception updating operational credentials parameters.");
+  }
+}
+
+/**
+ * Action: Grants interface layout switches once parameters align
+ */
+function establishAuthorizedSession(token) {
+  currentSessionToken = token;
+  toggleAuthModal(false);
+  
+  // Transition frontend workspace layout views safely
+  const standardLayout = document.getElementById("view-landing") || document.querySelector("section.premium-hero")?.parentElement;
+  const dashboardLayout = document.getElementById("view-crm") || document.querySelector(".app-view-panel");
+  
+  if (dashboardLayout) {
+    if (standardLayout) standardLayout.style.display = "none";
+    dashboardLayout.style.display = "block";
+    alert("LocalBoostPro Workspace Dashboard authorization mapping initialized perfectly.");
+  } else {
+    location.reload(); // Fallback update if static DOM layout is entirely detached
+  }
+}
+
+/**
+ * Secure Admin Bypass Hook via the word trigger inside footer paragraph rules
+ */
+function triggerAdminLogin() {
+  toggleAuthModal(true);
+}
+
+/**
+ * Action Trigger: Check Your Google Maps Position Instantly / Analyze Profiles Instantly
+ * Enforces email validation pipeline gates rather than passing through unverified.
+ */
 function initializeAuditFlow() {
-  const inputElement = document.getElementById('hero-biz-init');
-  temporalCachedBusinessName = inputElement ? inputElement.value.trim() : '';
-  
-  if (!temporalCachedBusinessName) {
-    alert('Please provide your registered business entity path identifier to initiate evaluation operations.');
-    return;
-  }
-  
-  // Launch the lead capture conversion modal step
-  document.getElementById('lead-capture-modal-overlay').classList.add('open');
-}
+  // Spawn explicit setup configuration prompts to build CRM contact lead tracking safely
+  const userEmail = prompt("To verify registration status and run continuous local tracking matrices, enter your business email:");
+  if (!userEmail) return;
 
-function closeLeadModal() {
-  document.getElementById('lead-capture-modal-overlay').classList.remove('open');
-}
+  const bizName = document.getElementById("hero-biz-init")?.value || prompt("Please provide your Corporate Legal Business Entity Name:");
+  if (!bizName) return;
 
-// Optimized Lead Registration Communication Loop
-async function commitLeadToGHLOurselves() {
-  const name = document.getElementById('lead-name').value.trim();
-  const email = document.getElementById('lead-email').value.trim();
-  const phone = document.getElementById('lead-phone').value.trim();
-
-  if (!name || !email || !phone) {
-    alert('Please populate all verification properties to authenticate your authorization permissions.');
-    return;
-  }
-
-  // Instantly unlock platform workspace paths to bypass CRM network blockages entirely
-  closeLeadModal();
-  toggleAppState(true);
-  
-  // Pre-populate core search values inside workspace panels automatically
-  document.getElementById('app-search-q').value = "Dentist"; 
-  document.getElementById('app-search-loc').value = temporalCachedBusinessName || "Phoenix, AZ";
-  executeLocalSearchMapAudit();
-
-  // Push customer tracking parameter logs to GHL node background streams safely
-  fetch('/api/lead', {
+  // Interface with backend rules to confirm clearance parameters
+  fetch('/api/trial/request-link', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      email,
-      phone,
-      businessName: temporalCachedBusinessName || "Local Operation"
-    })
-  }).catch(e => console.log('Background lead processing trace note:', e.message));
-
-  // Update real-time memory parameters
-  localizedContactsMemory.unshift({
-    name,
-    biz: temporalCachedBusinessName || "Local Operation",
-    email,
-    tag: 'lbp-prospect'
+    body: JSON.stringify({ email: userEmail, bizName: bizName })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.limitExceeded) {
+      alert(data.message);
+      // Automatically redirect prospect eye path cleanly down to subscription card tiers
+      document.getElementById("pricing")?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      alert(data.message);
+    }
+  })
+  .catch(err => {
+    alert("System diagnostic validation verification route failure anomaly.");
   });
 }
 
-// Local Search Map Execution Simulation Core Logic
-function executeLocalSearchMapAudit() {
-  const queryKeyword = document.getElementById('app-search-q').value.trim();
-  const targetLocation = document.getElementById('app-search-loc').value.trim();
-  const matrixShell = document.getElementById('heatmap-matrix-nodes');
-  
-  if (!queryKeyword || !targetLocation) return;
-
-  matrixShell.innerHTML = '';
-  
-  // Dynamically generate 49 hyper-dense map coordinates representing search locations
-  for (let nodeIdx = 1; nodeIdx <= 49; nodeIdx++) {
-    const randomSearchWeightScore = Math.floor(Math.random() * 14) + 1;
-    let assignmentBackgroundHexColor = '#EF4444'; // Red out of market rank state
-    
-    if (randomSearchWeightScore <= 3) {
-      assignmentBackgroundHexColor = '#10B981'; // Green local 3-pack optimization dominance
-    } else if (randomSearchWeightScore <= 7) {
-      assignmentBackgroundHexColor = '#F59E0B'; // Amber moderate target position trace
-    }
-
-    const cellCoordinateItemNode = document.createElement('div');
-    cellCoordinateItemNode.className = 'heatmap-node-point';
-    cellCoordinateItemNode.style.backgroundColor = assignmentBackgroundHexColor;
-    cellCoordinateItemNode.innerText = randomSearchWeightScore;
-    cellCoordinateItemNode.title = `Grid Position Marker [${nodeIdx}] — Algorithmic Position Rank: ${randomSearchWeightScore}`;
-    
-    matrixShell.appendChild(cellCoordinateItemNode);
-  }
-}
-
-// Render local contacts tracker loop inside workspace dashboard
-function renderCRMDataGrid() {
-  const tableContentNodeBody = document.getElementById('crm-body');
-  if (!localizedContactsMemory.length || !tableContentNodeBody) return;
-
-  tableContentNodeBody.innerHTML = localizedContactsMemory.map(recordItem => `
-    <tr>
-      <td><strong>${recordItem.name}</strong></td>
-      <td>${recordItem.biz}</td>
-      <td>${recordItem.email}</td>
-      <td><span style="background: rgba(0,229,255,0.1); color:#00E5FF; padding:3px 8px; border-radius:4px; font-weight:700; font-size:11px;">${recordItem.tag}</span></td>
-      <td>Direct API Loop Integration</td>
-    </tr>
-  `).join('');
-}
+// Hook legacy buttons dynamically if manually attached across scattered raw inline tags
+window.initializeAuditFlow = initializeAuditFlow;
+window.triggerAdminLogin = triggerAdminLogin;
