@@ -169,7 +169,7 @@ body:has(#application-workspace-wrapper[style*="display: block"]) { background: 
 .pg-sub { font-size: 13px; color: var(--app-muted); margin-bottom: 2rem; }
 
 .search-row { display: flex; gap: 12px; margin-bottom: 1.5rem; }
-.search-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--app-border); border-radius: var(--r); outline: none; font-size: 13.5px; }
+.search-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--app-border); border-radius: var(--r); outline: none; font-size: 13.5px; color:#000 !important; background: #FFF !important; }
 .btn { background: var(--purple); color: #FFF; border: none; padding: 12px 24px; border-radius: var(--r); font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: inherit; font-size: 13px; }
 .btn:hover { background: #63478C; }
 
@@ -191,7 +191,7 @@ body:has(#application-workspace-wrapper[style*="display: block"]) { background: 
 .xbtn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--app-muted); }
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
 .field label { font-size: 11px; font-weight: 700; color: var(--app-muted); text-transform: uppercase; }
-.field input { padding: 10px 14px; border: 1px solid var(--app-border); border-radius: var(--r); outline: none; font-family: inherit; }
+.field input { padding: 10px 14px; border: 1px solid var(--app-border); border-radius: var(--r); outline: none; font-family: inherit; color:#000 !important; background:#FFF !important; }
 
 /* TRUSTED TRUST TRACK ANIMATION SCHEMA */
 #aivm-trusted { background: #060610; padding: 64px 40px; position: relative; border-top: 1px solid rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.04); text-align: center;}
@@ -206,7 +206,15 @@ body:has(#application-workspace-wrapper[style*="display: block"]) { background: 
 .aivm-trusted-featured-stat-label { font-family: 'DM Sans', sans-serif; font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: .06em; text-transform: uppercase; }
 .aivm-trusted-label { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.3); text-align: center; margin-bottom: 32px; }
 .aivm-logo-track-wrap { overflow: hidden; position: relative; mask-image: linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%); -webkit-mask-image: linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%); }
-.aivm-logo-track { display: flex; align-items: center; gap: 48px; width: max-content; animation: logoScroll 45s linear infinite; }
+
+/* 5. LOGO CAROUSEL SPEED ENHANCEMENT */
+.aivm-logo-track {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  width: max-content;
+  animation: logoScroll 12s linear infinite; /* Accelerated from 45s to 12s for a premium feel */
+}
 @keyframes logoScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 .aivm-logo-item { flex-shrink: 0; height: 44px; display: flex; align-items: center; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 8px; padding: 8px 16px; }
 .aivm-logo-item img { height: 28px; width: auto; max-width: 110px; object-fit: contain; display: block; }
