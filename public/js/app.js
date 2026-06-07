@@ -1,76 +1,100 @@
 /**
  * LocalBoostPro - Client Engine Architecture File
  * File Context: Public client asset routing map (/public/app.js)
- * Version: 3.0.0 (Integrated Authorization Gateways & Overrides)
+ * Version: 4.0.0 (Unified Interface Core with Prospect Gateways & Admin Workspace Controls)
  */
 
-// Global Application Application View Layout State Control
-let currentSessionToken = null;
-let currentAuthenticatedEmail = null;
+// Global state cache sync
+let lbpSessionToken = localStorage.getItem('lbp_session_token') || null;
+let lbpUserEmail = localStorage.getItem('lbp_user_email') || null;
+let lbpUserRole = localStorage.getItem('lbp_user_role') || null;
 
-/**
- * Initialization routing triggered on startup
- */
 document.addEventListener("DOMContentLoaded", () => {
-  injectAuthenticationModals();
+  injectStructuralApplicationModals();
+  applyDynamicViewThresholds();
 });
 
 /**
- * Renders modal nodes cleanly to encapsulate all login, password demands, and resets inside a single shell
+ * Renders modal structures into DOM context ensuring zero trace elements are missing.
  */
-function injectAuthenticationModals() {
+function injectStructuralApplicationModals() {
   if (document.getElementById("lbp-auth-modal")) return;
 
   const modalHtml = `
-    <div id="lbp-auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10,10,31,0.9); z-index:99999; align-items:center; justify-content:center; font-family:'Poppins', sans-serif;">
-      <div style="background:#14142B; border:2px solid #00E5FF; padding:40px; border-radius:16px; width:100%; max-width:440px; position:relative; box-sizing:border-box; color:#FFF;">
-        <span onclick="toggleAuthModal(false)" style="position:absolute; top:15px; right:20px; cursor:pointer; color:#8892A4; font-size:20px;">&times;</span>
+    <div id="lbp-auth-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10,10,31,0.95); z-index:99999; align-items:center; justify-content:center; font-family:'Poppins', sans-serif; box-sizing:border-box;">
+      <div style="background:#14142B; border:2px solid #00E5FF; padding:40px; border-radius:16px; width:100%; max-width:460px; position:relative; box-sizing:border-box; color:#FFF; box-shadow: 0px 8px 32px rgba(0,229,255,0.15);">
+        <span onclick="toggleAuthModal(false)" style="position:absolute; top:15px; right:20px; cursor:pointer; color:#8892A4; font-size:22px; font-weight:700;">&times;</span>
         
-        <!-- View State 1: Primary Email Verification -->
         <div id="auth-state-email">
-          <h3 style="margin-top:0; color:#00E5FF; font-size:22px;">Customer Portal Authentication</h3>
-          <p style="color:#8892A4; font-size:13.5px; line-height:1.5;">Enter your registered account email to verify your subscription parameters and grant workspace access paths.</p>
+          <h3 style="margin-top:0; color:#00E5FF; font-size:22px; font-weight:700; letter-spacing:-0.02em;">Portal Verification</h3>
+          <p style="color:#8892A4; font-size:13.5px; line-height:1.6; margin-bottom:24px;">Enter your registered operational email coordinates below to authenticate dashboard environments.</p>
           <div style="margin-bottom:20px;">
-            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Account Registration Email</label>
-            <input type="email" id="auth-input-email" style="width:100%; padding:14px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:8px; box-sizing:border-box;">
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; letter-spacing:0.08em; margin-bottom:8px;">Identity Registry Email</label>
+            <input type="email" id="auth-input-email" placeholder="name@company.com" style="width:100%; padding:14px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:8px; box-sizing:border-box; font-size:14px;">
           </div>
-          <button onclick="processEmailAuthenticationStep()" style="width:100%; padding:14px; background:#00E5FF; color:#000; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px;">Verify Account Parameters</button>
+          <button onclick="processEmailAuthenticationStep()" style="width:100%; padding:14px; background:#00E5FF; color:#000; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px; transition:all 0.2s;">Validate Registration Profile</button>
         </div>
 
-        <!-- View State 2: Explicit Password Credentials Demand -->
         <div id="auth-state-password" style="display:none;">
-          <h3 style="margin-top:0; color:#00E5FF; font-size:22px;">Security Verification</h3>
-          <p style="color:#8892A4; font-size:13.5px;">This test account or admin override route requires a password signature validation to pass the framework gate.</p>
+          <h3 style="margin-top:0; color:#00E5FF; font-size:22px; font-weight:700;">Identity Challenge</h3>
+          <p style="color:#8892A4; font-size:13.5px; line-height:1.5;">This workspace profile is guarded explicitly by password authentication requirements.</p>
           <div style="margin-bottom:20px;">
-            <label id="lbl-authenticated-email" style="display:block; font-size:12px; color:#d4a017; font-weight:600; margin-bottom:12px;"></label>
-            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Account Security Password</label>
+            <label id="lbl-authenticated-email" style="display:block; font-size:12px; color:#d4a017; font-weight:600; margin-bottom:14px; background:rgba(212,160,23,0.1); padding:8px 12px; border-radius:6px; text-align:center;"></label>
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; letter-spacing:0.08em; margin-bottom:8px;">Account Password Signature</label>
             <input type="password" id="auth-input-password" style="width:100%; padding:14px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:8px; box-sizing:border-box;">
           </div>
-          <button onclick="processPasswordAuthenticationStep()" style="width:100%; padding:14px; background:#7B5EA7; color:#FFF; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px; margin-bottom:12px;">Confirm Credentials</button>
-          <div style="text-align:center;"><span onclick="switchAuthViewState('reset')" style="color:#d4a017; font-size:12px; cursor:pointer; text-decoration:underline;">Forgot Password / Reset Settings?</span></div>
+          <button onclick="processPasswordAuthenticationStep()" style="width:100%; padding:14px; background:#7B5EA7; color:#FFF; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px; margin-bottom:16px;">Verify Password</button>
+          <div style="text-align:center;"><span onclick="switchAuthViewState('reset')" style="color:#d4a017; font-size:12px; cursor:pointer; text-decoration:underline;">Forgot Password / Issue Reset Key?</span></div>
         </div>
 
-        <!-- View State 3: Password Recovery System -->
         <div id="auth-state-reset" style="display:none;">
-          <h3 style="margin-top:0; color:#d4a017; font-size:22px;">Reset System Password</h3>
-          <p style="color:#8892A4; font-size:13.5px;">Request a diagnostic verification reset key. In testing environments, tokens log output directly to your active runtime console container windows.</p>
-          <div id="reset-trigger-panel">
-            <button onclick="triggerPasswordResetOutbound()" style="width:100%; padding:12px; background:transparent; border:1px solid #444; color:#FFF; font-weight:600; border-radius:8px; cursor:pointer; font-size:13px; margin-bottom:15px;">Send Recovery Security Key</button>
+          <h3 style="margin-top:0; color:#d4a017; font-size:22px; font-weight:700;">Password Recovery Pipeline</h3>
+          <p style="color:#8892A4; font-size:13.5px; line-height:1.5;">Initialize reset routing updates. Security keys output directly inside your active server node dashboard terminal console window.</p>
+          <div id="reset-trigger-panel" style="margin-bottom:15px;">
+            <button onclick="triggerPasswordResetOutbound()" style="width:100%; padding:12px; background:transparent; border:1px solid #d4a017; color:#d4a017; font-weight:600; border-radius:8px; cursor:pointer; font-size:13px;">Generate Security Reset Key</button>
           </div>
-          <div id="reset-execution-panel" style="display:none; border-top:1px solid #2A2A40; padding-top:15px;">
+          <div id="reset-execution-panel" style="display:none; border-top:1px solid #2A2A40; padding-top:20px;">
             <div style="margin-bottom:12px;">
-              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:4px;">Verification Recovery Key</label>
-              <input type="text" id="reset-input-token" placeholder="RST-XXXXXX" style="width:100%; padding:10px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:6px;">Console Verification Key (RST-XXXXXX)</label>
+              <input type="text" id="reset-input-token" placeholder="RST-" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
             </div>
-            <div style="margin-bottom:15px;">
-              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:4px;">New Account Password</label>
-              <input type="password" id="reset-input-newpass" style="width:100%; padding:10px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+            <div style="margin-bottom:20px;">
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:6px;">Replacement Security Password</label>
+              <input type="password" id="reset-input-newpass" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
             </div>
-            <button onclick="executePasswordResetConfirmation()" style="width:100%; padding:12px; background:#00E5FF; color:#000; font-weight:700; border-radius:6px; cursor:pointer; font-size:13px;">Commit Password Update</button>
+            <button onclick="executePasswordResetConfirmation()" style="width:100%; padding:14px; background:#00E5FF; color:#000; font-weight:700; border-radius:8px; cursor:pointer; font-size:13px;">Commit Database Password Change</button>
           </div>
-          <div style="text-align:center; margin-top:15px;"><span onclick="switchAuthViewState('email')" style="color:#8892A4; font-size:12px; cursor:pointer; text-decoration:underline;">Back to System Identity Search</span></div>
+          <div style="text-align:center; margin-top:20px;"><span onclick="switchAuthViewState('email')" style="color:#8892A4; font-size:12px; cursor:pointer; text-decoration:underline;">Return to Identity Verification</span></div>
         </div>
 
+      </div>
+    </div>
+
+    <div id="lbp-lead-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10,10,31,0.95); z-index:99998; align-items:center; justify-content:center; font-family:'Poppins', sans-serif; box-sizing:border-box; padding:20px;">
+      <div style="background:#14142B; border:2px solid #7B5EA7; padding:40px; border-radius:16px; width:100%; max-width:480px; position:relative; color:#FFF; box-sizing:border-box;">
+        <span onclick="toggleLeadModal(false)" style="position:absolute; top:15px; right:20px; cursor:pointer; color:#8892A4; font-size:22px;">&times;</span>
+        <h3 style="margin-top:0; color:#7B5EA7; font-size:24px; font-weight:700; margin-bottom:8px;">Initialize Diagnostic Scanning Pipeline</h3>
+        <p style="color:#8892A4; font-size:13.5px; line-height:1.5; margin-bottom:24px;">Provide matching parameter targets below. To secure active boundaries, we verify individual access tokens before generating proximity matrix fields.</p>
+        
+        <div style="display:grid; gap:16px; margin-bottom:24px;">
+          <div>
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Your Professional Identity Name</label>
+            <input type="text" id="lead-field-name" placeholder="John Doe" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Corporate Business Email</label>
+            <input type="email" id="lead-field-email" placeholder="john@company.com" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Mobile Communications Number</label>
+            <input type="tel" id="lead-field-phone" placeholder="(555) 000-0000" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; font-weight:700; margin-bottom:6px;">Target Google Map Business Name</label>
+            <input type="text" id="lead-field-biz" placeholder="Apex Dental Clinic" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+          </div>
+        </div>
+        <button onclick="commitProspectRegistrationStream()" style="width:100%; padding:14px; background:#7B5EA7; color:#FFF; border:none; font-weight:700; border-radius:8px; cursor:pointer; font-size:14px;">Generate Verification Opt-In Link</button>
       </div>
     </div>
   `;
@@ -81,30 +105,87 @@ function injectAuthenticationModals() {
 }
 
 /**
- * Global interface utility to toggle visibility thresholds
+ * Controller: Handles UI layout views conditionally mapping routing logic based on dynamic user tokens
  */
-function toggleAuthModal(show = true) {
-  const modal = document.getElementById("lbp-auth-modal");
-  if (!modal) return;
-  modal.style.display = show ? "flex" : "none";
-  if (show) switchAuthViewState('email');
+function applyDynamicViewThresholds() {
+  const landingSection = document.getElementById("view-landing") || document.querySelector("section.premium-hero")?.parentElement;
+  const dashboardSection = document.getElementById("view-crm") || document.querySelector(".app-view-panel");
+  const adminSection = document.getElementById("view-admin-panel");
+
+  // Hide layouts entirely to begin parsing process safely
+  if (dashboardSection) dashboardSection.style.display = "none";
+  if (adminSection) adminSection.style.display = "none";
+
+  if (lbpSessionToken) {
+    if (landingSection) landingSection.style.display = "none";
+
+    if (lbpUserRole === "admin") {
+      renderAdminDashboardEnvironment();
+    } else {
+      if (dashboardSection) dashboardSection.style.display = "block";
+    }
+  } else {
+    if (landingSection) landingSection.style.display = "block";
+  }
 }
 
 /**
- * Handle inner state visualization switching
+ * Action: Request account analysis triggers email verification loops
  */
-function switchAuthViewState(state) {
-  document.getElementById("auth-state-email").style.display = state === 'email' ? 'block' : 'none';
-  document.getElementById("auth-state-password").style.display = state === 'password' ? 'block' : 'none';
-  document.getElementById("auth-state-reset").style.display = state === 'reset' ? 'block' : 'none';
+function initializeAuditFlow() {
+  const primaryHeroInput = document.getElementById("hero-biz-init")?.value || "";
+  if (primaryHeroInput) {
+    const targetField = document.getElementById("lead-field-biz");
+    if (targetField) targetField.value = primaryHeroInput;
+  }
+  toggleLeadModal(true);
 }
 
 /**
- * Action: Validates account status parameters from provided text values
+ * Step 1 Submissions: Pushes core credentials down to server boundaries
  */
+async function commitProspectRegistrationStream() {
+  const name = document.getElementById("lead-field-name").value;
+  const email = document.getElementById("lead-field-email").value;
+  const phone = document.getElementById("lead-field-phone").value;
+  const businessName = document.getElementById("lead-field-biz").value;
+
+  if (!name || !email || !businessName) {
+    return alert("Please fulfill all necessary operational property markers.");
+  }
+
+  try {
+    const response = await fetch('/api/trial/register-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, businessName })
+    });
+    const data = await response.json();
+
+    if (data.exhausted) {
+      alert(data.message);
+      toggleLeadModal(false);
+      return document.getElementById("pricing")?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if (data.success) {
+      alert(data.message);
+      toggleLeadModal(false);
+    } else {
+      alert(data.message || "Pipeline processing error configuration mismatch anomaly.");
+    }
+  } catch (err) {
+    alert("Connection error tracking metrics to target orchestration engines.");
+  }
+}
+
+// ============================================================================
+// CREDENTIAL COMPONENT HANDLING LOOPS
+// ============================================================================
+
 async function processEmailAuthenticationStep() {
   const emailVal = document.getElementById("auth-input-email").value;
-  if (!emailVal) return alert("Please supply an email identity point.");
+  if (!emailVal) return alert("Email string parameter must be explicitly populated.");
 
   try {
     const response = await fetch('/api/auth', {
@@ -114,161 +195,281 @@ async function processEmailAuthenticationStep() {
     });
     const data = await response.json();
 
-    if (!response.ok && !data.requiresPassword) {
-      return alert(data.message || "Subscription token checking engine returned an invalid state.");
-    }
-
-    currentAuthenticatedEmail = emailVal.toLowerCase().trim();
+    lbpUserEmail = emailVal.toLowerCase().trim();
 
     if (data.requiresPassword) {
-      document.getElementById("lbl-authenticated-email").innerText = `Account Target: ${currentAuthenticatedEmail}`;
+      document.getElementById("lbl-authenticated-email").innerText = `Target Account: ${lbpUserEmail}`;
       document.getElementById("auth-input-password").value = "";
       return switchAuthViewState('password');
     }
 
-    if (data.success) {
-      establishAuthorizedSession(data.token);
+    if (response.ok && data.success) {
+      saveSessionMetrics(data.token, data.email, data.role);
+    } else {
+      alert(data.message || "Verification criteria mismatch tracking paid indicators inside GHL pipeline nodes.");
     }
   } catch (err) {
-    alert("Connection breakdown when interfacing with validation engine pipeline arrays.");
+    alert("Communication failure evaluating verification states across server arrays.");
   }
 }
 
-/**
- * Action: Submits and confirms user passwords against database entries
- */
 async function processPasswordAuthenticationStep() {
   const passwordVal = document.getElementById("auth-input-password").value;
-  if (!passwordVal) return alert("Password configuration field must not be vacant.");
+  if (!passwordVal) return alert("Password verification field context signature missing.");
 
   try {
     const response = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: currentAuthenticatedEmail, password: passwordVal })
+      body: JSON.stringify({ email: lbpUserEmail, password: passwordVal })
     });
     const data = await response.json();
 
     if (response.ok && data.success) {
-      establishAuthorizedSession(data.token);
+      saveSessionMetrics(data.token, data.email, data.role);
     } else {
-      alert(data.message || "Invalid account matching key pattern failed authorization logic.");
+      alert(data.message || "Invalid security token parameters mapped.");
     }
   } catch (err) {
-    alert("Failed processing network handshake across local credentials cluster.");
+    alert("Network exception processing user verification handshakes.");
   }
 }
 
-/**
- * Action: Calls server route to issue code structures
- */
 async function triggerPasswordResetOutbound() {
   try {
     const response = await fetch('/api/auth/reset-password-request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: currentAuthenticatedEmail })
+      body: JSON.stringify({ email: lbpUserEmail })
     });
-    const data = await response.json();
     if (response.ok) {
-      alert("A diagnostic secure validation string was created successfully. Please locate the token key string inside your node terminal window.");
+      alert("System key tracking initialized. Inspect your runtime terminal engine output stream logs.");
       document.getElementById("reset-execution-panel").style.display = "block";
     } else {
-      alert(data.message || "Could not execute requested state changes.");
+      alert("Failed rendering password transformation triggers.");
     }
   } catch (err) {
-    alert("Error executing password system recovery pipeline actions.");
+    alert("Exception routing recovery handshakes down to processing loops.");
   }
 }
 
-/**
- * Action: Confirms reset adjustments and modifies server database
- */
 async function executePasswordResetConfirmation() {
   const token = document.getElementById("reset-input-token").value;
   const newPass = document.getElementById("reset-input-newpass").value;
 
-  if (!token || !newPass) return alert("All matching verification inputs require variable data values.");
+  if (!token || !newPass) return alert("All parameter adjustments must possess data mappings.");
 
   try {
     const response = await fetch('/api/auth/reset-password-confirm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: currentAuthenticatedEmail, resetToken: token, newPassword: newPass })
+      body: JSON.stringify({ email: lbpUserEmail, resetToken: token, newPassword: newPass })
     });
     const data = await response.json();
     if (response.ok) {
-      alert(data.message || "Security metrics altered. Authenticate utilizing updated profile patterns.");
+      alert(data.message || "State database configuration rewritten cleanly.");
       switchAuthViewState('password');
-      document.getElementById("reset-execution-panel").style.display = "none";
     } else {
-      alert(data.message || "Reset request token confirmation validation rejection error.");
+      alert(data.message || "Verification code rejected.");
     }
   } catch (err) {
-    alert("Network response exception updating operational credentials parameters.");
+    alert("Fatal error processing parameter update executions.");
+  }
+}
+
+// ============================================================================
+// DEDICATED ADMINISTRATIVE INTERACTIVE PORTAL VIEW
+// ============================================================================
+
+async function renderAdminDashboardEnvironment() {
+  // Purge standard framework shell containers to dynamically map administrative configurations
+  let adminShell = document.getElementById("view-admin-panel");
+  
+  if (!adminShell) {
+    adminShell = document.createElement('main');
+    adminShell.id = "view-admin-panel";
+    adminShell.className = "app-view-panel";
+    adminShell.style.cssText = "display:block; padding:60px 40px; background:#0A0A1F; min-height:100vh; color:#FFF; font-family:'Poppins', sans-serif;";
+    document.body.appendChild(adminShell);
+  }
+
+  try {
+    const response = await fetch('/api/admin/metrics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: lbpSessionToken })
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert("Session expired or unauthorized administrative configuration token.");
+      return purgeSessionMetrics();
+    }
+
+    let userRows = '';
+    Object.keys(data.userMatrix).forEach(email => {
+      const u = data.userMatrix[email];
+      userRows += `
+        <tr style="border-bottom:1px solid #2A2A40;">
+          <td style="padding:12px; color:#00E5FF;">${email}</td>
+          <td style="padding:12px; color:#FFF;">${u.password}</td>
+          <td style="padding:12px;"><span style="background:#7B5EA7; padding:4px 8px; border-radius:4px; font-size:11px;">${u.role}</span></td>
+          <td style="padding:12px; color:#d4a017;">${u.source}</td>
+        </tr>
+      `;
+    });
+
+    adminShell.innerHTML = `
+      <div style="max-width:1100px; margin:0 auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; border-bottom:1px solid #2A2A40; padding-bottom:20px;">
+          <div>
+            <h1 style="margin:0; font-size:32px; font-weight:700; color:#00E5FF;">Super Admin System Dashboard</h1>
+            <p style="margin:4px 0 0; color:#8892A4; font-size:14px;">Platform Performance & Account Assignment Control Console</p>
+          </div>
+          <button onclick="purgeSessionMetrics()" style="padding:10px 20px; background:#FF3B30; color:#FFF; border:none; font-weight:600; border-radius:6px; cursor:pointer;">Exit Console</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-bottom:40px;">
+          <div style="background:#14142B; padding:24px; border-radius:12px; border:1px solid #2A2A40;">
+            <div style="font-size:12px; text-transform:uppercase; color:#666680; font-weight:700;">GHL API Integration Routing</div>
+            <div style="font-size:20px; font-weight:600; color:#00E5FF; margin-top:8px;">${data.systemPerformance.ghlConnectivity}</div>
+          </div>
+          <div style="background:#14142B; padding:24px; border-radius:12px; border:1px solid #2A2A40;">
+            <div style="font-size:12px; text-transform:uppercase; color:#666680; font-weight:700;">Stripe Webhook Listeners</div>
+            <div style="font-size:20px; font-weight:600; color:#d4a017; margin-top:8px;">${data.systemPerformance.stripeHookStatus}</div>
+          </div>
+          <div style="background:#14142B; padding:24px; border-radius:12px; border:1px solid #2A2A40;">
+            <div style="font-size:12px; text-transform:uppercase; color:#666680; font-weight:700;">Active Engine Container Uptime</div>
+            <div style="font-size:20px; font-weight:600; color:#FFF; margin-top:8px;">${Math.floor(data.systemPerformance.uptime)} Seconds</div>
+          </div>
+        </div>
+
+        <div style="background:#14142B; border:1px solid #2A2A40; border-radius:12px; padding:30px; margin-bottom:40px;">
+          <h3 style="margin-top:0; color:#FFF; font-size:18px; margin-bottom:20px;">Programmatic Account Manual Assignment</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; align-items:end;">
+            <div>
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:6px;">Target Account Email</label>
+              <input type="email" id="adm-assign-email" placeholder="user@domain.com" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:6px;">Default Security Password</label>
+              <input type="text" id="adm-assign-pass" placeholder="Password123!" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+            </div>
+            <div>
+              <label style="display:block; font-size:11px; text-transform:uppercase; color:#666680; margin-bottom:6px;">Role Designation</label>
+              <select id="adm-assign-role" style="width:100%; padding:12px; background:#0A0A1F; border:1px solid #2A2A40; color:#FFF; border-radius:6px; box-sizing:border-box;">
+                <option value="customer">Standard Customer Tier</option>
+                <option value="admin">System Super Admin</option>
+              </select>
+            </div>
+            <button onclick="executeAdministrativeAssignmentAction()" style="padding:14px; background:#00E5FF; color:#000; border:none; font-weight:700; border-radius:6px; cursor:pointer;">Provision Access Rules</button>
+          </div>
+        </div>
+
+        <div style="background:#14142B; border:1px solid #2A2A40; border-radius:12px; padding:30px; box-sizing:border-box;">
+          <h3 style="margin-top:0; color:#FFF; font-size:18px; margin-bottom:20px;">Indexed Internal User Registry</h3>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:14px;">
+              <thead>
+                <tr style="border-bottom:2px solid #2A2A40; color:#666680;">
+                  <th style="padding:12px;">Identification Profile Coordinate</th>
+                  <th style="padding:12px;">Active Plaintext Password</th>
+                  <th style="padding:12px;">Permissions Level</th>
+                  <th style="padding:12px;">Source Provenance Tracking</th>
+                </tr>
+              </thead>
+              <tbody>${userRows}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    alert("Failed rendering administrative database parameters context screens cleanly.");
   }
 }
 
 /**
- * Action: Grants interface layout switches once parameters align
+ * Super Admin Logic Form Actions Handler
  */
-function establishAuthorizedSession(token) {
-  currentSessionToken = token;
+async function executeAdministrativeAssignmentAction() {
+  const targetEmail = document.getElementById("adm-assign-email").value;
+  const defaultPassword = document.getElementById("adm-assign-pass").value;
+  const targetRole = document.getElementById("adm-assign-role").value;
+
+  if (!targetEmail || !defaultPassword) return alert("Fulfill target parameter elements.");
+
+  try {
+    const response = await fetch('/api/admin/assign-unpaid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: lbpSessionToken,
+        targetEmail,
+        defaultPassword,
+        targetRole
+      })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+      renderAdminDashboardEnvironment(); // Soft refresh administrative table values seamlessly
+    } else {
+      alert(data.message || "Failed saving changes.");
+    }
+  } catch (err) {
+    alert("Network exception writing manual provisioning parameters down to server container states.");
+  }
+}
+
+// ============================================================================
+// SYSTEM UTILITIES STATE ENCAPSULATIONS
+// ============================================================================
+
+function saveSessionMetrics(token, email, role) {
+  lbpSessionToken = token;
+  lbpUserEmail = email;
+  lbpUserRole = role;
+
+  localStorage.setItem('lbp_session_token', token);
+  localStorage.setItem('lbp_user_email', email);
+  localStorage.setItem('lbp_user_role', role);
+
   toggleAuthModal(false);
-  
-  // Transition frontend workspace layout views safely
-  const standardLayout = document.getElementById("view-landing") || document.querySelector("section.premium-hero")?.parentElement;
-  const dashboardLayout = document.getElementById("view-crm") || document.querySelector(".app-view-panel");
-  
-  if (dashboardLayout) {
-    if (standardLayout) standardLayout.style.display = "none";
-    dashboardLayout.style.display = "block";
-    alert("LocalBoostPro Workspace Dashboard authorization mapping initialized perfectly.");
-  } else {
-    location.reload(); // Fallback update if static DOM layout is entirely detached
-  }
+  applyDynamicViewThresholds();
 }
 
-/**
- * Secure Admin Bypass Hook via the word trigger inside footer paragraph rules
- */
+function purgeSessionMetrics() {
+  lbpSessionToken = null;
+  lbpUserEmail = null;
+  lbpUserRole = null;
+
+  localStorage.clear();
+  location.reload();
+}
+
+function toggleAuthModal(show = true) {
+  const modal = document.getElementById("lbp-auth-modal");
+  if (modal) modal.style.display = show ? "flex" : "none";
+  if (show) switchAuthViewState('email');
+}
+
+function toggleLeadModal(show = true) {
+  const modal = document.getElementById("lbp-lead-modal");
+  if (modal) modal.style.display = show ? "flex" : "none";
+}
+
+function switchAuthViewState(state) {
+  document.getElementById("auth-state-email").style.display = state === 'email' ? 'block' : 'none';
+  document.getElementById("auth-state-password").style.display = state === 'password' ? 'block' : 'none';
+  document.getElementById("auth-state-reset").style.display = state === 'reset' ? 'block' : 'none';
+}
+
 function triggerAdminLogin() {
   toggleAuthModal(true);
 }
 
-/**
- * Action Trigger: Check Your Google Maps Position Instantly / Analyze Profiles Instantly
- * Enforces email validation pipeline gates rather than passing through unverified.
- */
-function initializeAuditFlow() {
-  // Spawn explicit setup configuration prompts to build CRM contact lead tracking safely
-  const userEmail = prompt("To verify registration status and run continuous local tracking matrices, enter your business email:");
-  if (!userEmail) return;
-
-  const bizName = document.getElementById("hero-biz-init")?.value || prompt("Please provide your Corporate Legal Business Entity Name:");
-  if (!bizName) return;
-
-  // Interface with backend rules to confirm clearance parameters
-  fetch('/api/trial/request-link', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: userEmail, bizName: bizName })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.limitExceeded) {
-      alert(data.message);
-      // Automatically redirect prospect eye path cleanly down to subscription card tiers
-      document.getElementById("pricing")?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      alert(data.message);
-    }
-  })
-  .catch(err => {
-    alert("System diagnostic validation verification route failure anomaly.");
-  });
-}
-
-// Hook legacy buttons dynamically if manually attached across scattered raw inline tags
+// Global window mappings to resolve legacy template references perfectly
 window.initializeAuditFlow = initializeAuditFlow;
 window.triggerAdminLogin = triggerAdminLogin;
+window.purgeSessionMetrics = purgeSessionMetrics;
