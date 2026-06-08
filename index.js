@@ -344,10 +344,17 @@ app.post('/api/auth/reset-password-request', (req, res) => {
     const recoveryKey = "RST-" + Math.floor(Math.random() * 900000 + 100000);
     systemDb.users[normalizedEmail].resetToken = recoveryKey;
     
+    // Log to console as before
     console.log(`\n[CRITICAL PASSWORD SYSTEM HANDSHAKE KEY GENERATED]`);
     console.log(`Target: ${normalizedEmail} | Secret Active Security Token: ${recoveryKey}\n`);
     
-    return res.json({ success: true, message: "Verification recovery key triggered and logged to secure console pipeline." });
+    // FIX D: Also return the token directly in the response so the admin panel
+    // can display it on-screen — no more digging through Railway logs
+    return res.json({ 
+      success: true, 
+      resetToken: recoveryKey,
+      message: "Verification recovery key generated." 
+    });
   }
   return res.status(404).json({ success: false, message: "Profile parameters not indexed inside local system database." });
 });
