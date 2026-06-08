@@ -49,9 +49,14 @@ function injectStructuralApplicationModals() {
 
         <div id="auth-state-reset" style="display:none;">
           <h3 style="margin-top:0; color:#d4a017; font-size:22px; font-weight:700;">Password Recovery Pipeline</h3>
-          <p style="color:#8892A4; font-size:13.5px; line-height:1.5;">Initialize reset routing updates. Security keys output directly inside your active server node dashboard terminal console window.</p>
+          <p style="color:#8892A4; font-size:13.5px; line-height:1.5;">Click the button below to generate a one-time reset key. It will appear on screen immediately — no console digging required.</p>
           <div id="reset-trigger-panel" style="margin-bottom:15px;">
             <button onclick="triggerPasswordResetOutbound()" style="width:100%; padding:12px; background:transparent; border:1px solid #d4a017; color:#d4a017; font-weight:600; border-radius:8px; cursor:pointer; font-size:13px;">Generate Security Reset Key</button>
+          </div>
+          <div id="reset-token-reveal-block" style="display:none; margin-bottom:16px; background:rgba(212,160,23,0.1); border:1px solid #d4a017; border-radius:8px; padding:14px 16px;">
+            <div style="font-size:10px; text-transform:uppercase; color:#d4a017; font-weight:700; letter-spacing:0.1em; margin-bottom:6px;">Your One-Time Reset Key</div>
+            <div id="reset-token-display" style="font-size:20px; font-weight:700; color:#FFF; letter-spacing:0.06em; font-family:monospace;"></div>
+            <div style="font-size:11px; color:#8892A4; margin-top:6px;">Copy this key and paste it below. It has already been pre-filled for you.</div>
           </div>
           <div id="reset-execution-panel" style="display:none; border-top:1px solid #2A2A40; padding-top:20px;">
             <div style="margin-bottom:12px;">
@@ -101,7 +106,10 @@ function injectStructuralApplicationModals() {
 
   const shell = document.createElement('div');
   shell.innerHTML = modalHtml;
-  document.body.appendChild(shell.firstElementChild);
+  // Append ALL modal children (auth modal + lead modal), not just the first
+  while (shell.firstElementChild) {
+    document.body.appendChild(shell.firstElementChild);
+  }
 }
 
 /**
@@ -242,11 +250,18 @@ async function triggerPasswordResetOutbound() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: lbpUserEmail })
     });
-    if (response.ok) {
-      alert("System key tracking initialized. Inspect your runtime terminal engine output stream logs.");
+    const data = await response.json();
+    if (response.ok && data.success) {
+      // FIX D: Show the reset token directly in the UI — no more hunting Railway logs
+      const tokenDisplay = document.getElementById("reset-token-display");
+      if (tokenDisplay && data.resetToken) {
+        tokenDisplay.textContent = data.resetToken;
+        tokenDisplay.closest('#reset-token-reveal-block').style.display = 'block';
+      }
+      document.getElementById("reset-input-token").value = data.resetToken || '';
       document.getElementById("reset-execution-panel").style.display = "block";
     } else {
-      alert("Failed rendering password transformation triggers.");
+      alert("Failed generating password reset key. Account not found.");
     }
   } catch (err) {
     alert("Exception routing recovery handshakes down to processing loops.");
@@ -473,3 +488,40 @@ function triggerAdminLogin() {
 window.initializeAuditFlow = initializeAuditFlow;
 window.triggerAdminLogin = triggerAdminLogin;
 window.purgeSessionMetrics = purgeSessionMetrics;
+
+// ============================================================================
+// FIX C: FAQ ACCORDION ENGINE
+// ============================================================================
+
+/**
+ * Toggles an accordion item open/closed by animating max-height.
+ */
+function toggleAccordionNode(triggerBtn) {
+  const item = triggerBtn.closest('.accordion-item');
+  const content = item.querySelector('.accordion-content');
+  const icon = triggerBtn.querySelector('.icon');
+  const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+  // Close all other open accordions in the same group
+  const group = item.closest('.accordion-group');
+  if (group) {
+    group.querySelectorAll('.accordion-item').forEach(otherItem => {
+      if (otherItem !== item) {
+        const otherContent = otherItem.querySelector('.accordion-content');
+        const otherIcon = otherItem.querySelector('.icon');
+        if (otherContent) otherContent.style.maxHeight = '0px';
+        if (otherIcon) otherIcon.textContent = '+';
+      }
+    });
+  }
+
+  if (isOpen) {
+    content.style.maxHeight = '0px';
+    if (icon) icon.textContent = '+';
+  } else {
+    content.style.maxHeight = content.scrollHeight + 'px';
+    if (icon) icon.textContent = '×';
+  }
+}
+
+window.toggleAccordionNode = toggleAccordionNode;
